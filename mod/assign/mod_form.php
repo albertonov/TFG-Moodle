@@ -106,6 +106,23 @@ class mod_assign_mod_form extends moodleform_mod {
 
         $assignment->add_all_plugin_settings($mform);
 
+        $mform->addElement('header', 'gamificationheader', 'Gamificación');
+        $name =  'Activar gamificación';
+        $mform->addElement('selectyesno', 'GamificationEnabled', $name);
+
+
+        $options = array();
+        $options[0] = 'Fácil';
+        $options[1] = 'Normal';
+        $options[2] = 'Dificil';
+        $options[3] = 'Muy dificil';
+
+        $name = 'Grado de Dificultad';
+        $mform->addElement('select', 'multiplicador', $name, $options);
+        $mform->disabledIf('multiplicador', 'GamificationEnabled', 'no');
+
+
+
         $mform->addElement('header', 'submissionsettings', get_string('submissionsettings', 'assign'));
 
         $name = get_string('submissiondrafts', 'assign');

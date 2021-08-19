@@ -740,6 +740,26 @@ class assign {
         if (empty($update->markingworkflow)) { // If marking workflow is disabled, make sure allocation is disabled.
             $update->markingallocation = 0;
         }
+        if (isset($formdata->GamificationEnabled))  {
+            $update->isgamebased = $formdata->GamificationEnabled ;
+
+            if (isset($formdata->multiplicador)) {
+                switch ($formdata->multiplicador) {
+                    case 0:
+                        $update->multiplicadorgb = 0.75;
+                        break;
+                    case 1:
+                        $update->multiplicadorgb = 1.00;
+                        break;
+                    case 2:
+                        $update->multiplicadorgb = 1.25;
+                        break;
+                    case 3:
+                        $update->multiplicadorgb = 1.75;
+                        break;
+                }
+            }
+        } 
 
         $returnid = $DB->insert_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$returnid), '*', MUST_EXIST);
@@ -1484,6 +1504,26 @@ class assign {
         if (empty($update->markingworkflow)) { // If marking workflow is disabled, make sure allocation is disabled.
             $update->markingallocation = 0;
         }
+        if (isset($formdata->GamificationEnabled))  {
+            $update->isgamebased = $formdata->GamificationEnabled ;
+
+            if (isset($formdata->multiplicador)) {
+                switch ($formdata->multiplicador) {
+                    case 0:
+                        $update->multiplicadorgb = 0.75;
+                        break;
+                    case 1:
+                        $update->multiplicadorgb = 1.00;
+                        break;
+                    case 2:
+                        $update->multiplicadorgb = 1.25;
+                        break;
+                    case 3:
+                        $update->multiplicadorgb = 1.75;
+                        break;
+                }
+            }
+        } 
 
         $result = $DB->update_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$update->id), '*', MUST_EXIST);
