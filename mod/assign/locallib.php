@@ -7407,6 +7407,10 @@ class assign {
         return true;
     }
 
+
+
+
+    
     /**
      * Save assignment submission for the current user.
      *
@@ -7422,7 +7426,7 @@ class assign {
         if (!empty($data->userid)) {
             $userid = $data->userid;
         }
-
+        
         $user = clone($USER);
         if ($userid == $USER->id) {
             require_capability('mod/assign:submit', $this->context);
@@ -7524,6 +7528,11 @@ class assign {
             $this->notify_graders($submission);
             \mod_assign\event\assessable_submitted::create_from_submission($this, $submission, true)->trigger();
         }
+        if($instance->isgamebased) {
+            $expGained = $instance->multiplicadorgb * 15;
+            core_user::user_add_experience_to_total($userid, $expGained);   
+        }
+     
         return true;
     }
 
@@ -7549,7 +7558,7 @@ class assign {
             return false;
         }
         $instance = $this->get_instance();
-
+        
         $data = new stdClass();
         $data->userid = $userid;
         $mform = new mod_assign_submission_form(null, array($this, $data));

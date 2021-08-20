@@ -1157,4 +1157,15 @@ class core_user {
         }
     }
 
+    static function user_add_experience_to_total($userid, $experience) {
+        global $DB;
+    
+        $DB->execute("UPDATE mdl_user
+        SET totalExperience = totalExperience + $experience
+        WHERE $userid = id");
+        return true;
+    }
+    
+
+
 }
