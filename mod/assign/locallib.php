@@ -7530,7 +7530,7 @@ class assign {
         }
         if($instance->isgamebased) {
             $expGained = $instance->multiplicadorgb * 15;
-            core_user::user_add_experience_to_total($userid, $expGained);   
+            core_user::user_add_experience_to_total_and_course($userid, $expGained,$instance->course );   
         }
      
         return true;

@@ -1157,12 +1157,16 @@ class core_user {
         }
     }
 
-    static function user_add_experience_to_total($userid, $experience) {
+    static function user_add_experience_to_total_and_course($userid, $experience, $course) {
         global $DB;
-    
         $DB->execute("UPDATE mdl_user
         SET totalExperience = totalExperience + $experience
         WHERE $userid = id");
+
+        $DB->execute("UPDATE mdl_user_enrolments
+        SET courseexperience = courseexperience + $experience
+        where userid = $userid and enrolid in ( SELECT id from mdl_enrol where courseid = $course)
+        ");
         return true;
     }
     
