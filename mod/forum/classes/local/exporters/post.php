@@ -216,6 +216,13 @@ class post extends exporter {
                         'default' => null,
                         'null' => NULL_ALLOWED
                     ],
+                    'calificate' => [
+                        'description' => 'The URL used to calificate the post',
+                        'type' => PARAM_URL,
+                        'optional' => true,
+                        'default' => null,
+                        'null' => NULL_ALLOWED
+                    ],
                     'split' => [
                         'description' => 'The URL used to split the discussion ' .
                             'with the selected post being the first post in the new discussion',
@@ -389,6 +396,10 @@ class post extends exporter {
         $markasunreadurl = $cancontrolreadstatus ? $urlfactory->get_mark_post_as_unread_url_from_post($post) : null;
         $discussurl = $canview ? $urlfactory->get_discussion_view_url_from_post($post) : null;
 
+        $calificatenegativeurl = $urlfactory->get_calificate_url_from_post($post, 'negative');
+        $calificatepositiveurl = $urlfactory->get_calificate_url_from_post($post, 'positive');
+        $calificatelikeurl = $urlfactory->get_calificate_url_from_post($post, 'like');
+
         $authorexporter = new author_exporter(
             $author,
             $authorcontextid,
@@ -460,6 +471,12 @@ class post extends exporter {
                 'viewparent' => $viewparenturl ? $viewparenturl->out(false) : null,
                 'edit' => $editurl ? $editurl->out(false) : null,
                 'delete' => $deleteurl ? $deleteurl->out(false) : null,
+                'calificate' => [
+                    'like' => $calificatelikeurl,
+                    'positive' => $calificatepositiveurl,
+                    'negative' => $calificatenegativeurl 
+                ],
+                
                 'split' => $spliturl ? $spliturl->out(false) : null,
                 'reply' => $replyurl ? $replyurl->out(false) : null,
                 'export' => $exporturl && $exporturl ? $exporturl->out(false) : null,

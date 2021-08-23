@@ -284,6 +284,12 @@ class url {
         ]);
     }
 
+    public function get_calificate_url_from_post(post_entity $post, $calificate) : moodle_url {
+        return new moodle_url('/mod/forum/post.php', [
+            'idpost' => $post->get_id(),
+            'calificate' => $calificate
+        ]);
+    }
     /**
      * Get the url to reply to a post.
      *

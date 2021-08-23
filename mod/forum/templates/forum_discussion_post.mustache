@@ -200,13 +200,44 @@
                                             {{#view}}
                                                 <a
                                                     data-region="post-action"
+                                                    href="{{{urls.calificate.positive}}}"
+                                                    class="btn btn-link"
+                                                    title="Calificar con un me gusta a tu compañero"
+                                                    aria-label="Calificar con un me gusta a tu compañero"
+                                                    role="menuitem"
+                                                >
+                                                {{#pix}} s/yes, core {{/pix}}
+                                                </a>
+                                                <a
+                                                    data-region="post-action"
+                                                    href="{{{urls.calificate.negative}}}"
+                                                    class="btn btn-link"
+                                                    title="Calificar con un me gusta a tu compañero"
+                                                    aria-label="Calificar con un me gusta a tu compañero"
+                                                    role="menuitem"
+                                                >
+                                                {{#pix}} s/no, core {{/pix}}
+                                                </a>
+
+                                                <a
+                                                    data-region="post-action"
+                                                    href="{{{urls.calificate.like}}}"
+                                                    class="btn btn-link"
+                                                    title="Calificar con un me gusta a tu compañero"
+                                                    aria-label="Calificar con un me gusta a tu compañero"
+                                                    role="menuitem"
+                                                >
+                                                {{#pix}} s/heart, core {{/pix}}
+                                                </a>
+                                                <a
+                                                    data-region="post-action"
                                                     href="{{{urls.view}}}"
                                                     class="btn btn-link"
                                                     title="{{#str}} permanentlinktopost, mod_forum {{/str}}"
                                                     aria-label="{{#str}} permanentlinktopost, mod_forum {{/str}}"
                                                     role="menuitem"
                                                 >
-                                                    {{#str}} permalink, mod_forum {{/str}}
+                                                    {{#str}} permalink, mod_forum {{/str}} 
                                                 </a>
                                             {{/view}}
                                             {{#controlreadstatus}}

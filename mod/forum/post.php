@@ -35,7 +35,8 @@ $name    = optional_param('name', '', PARAM_CLEAN);
 $confirm = optional_param('confirm', 0, PARAM_INT);
 $groupid = optional_param('groupid', null, PARAM_INT);
 $subject = optional_param('subject', '', PARAM_TEXT);
-
+$calificate  = optional_param('calificate', 0, PARAM_TEXT);
+$idpost =  optional_param('idpost', 0, PARAM_INT);
 // Values posted via the inpage reply form.
 $prefilledpost = optional_param('post', '', PARAM_TEXT);
 $prefilledpostformat = optional_param('postformat', FORMAT_MOODLE, PARAM_INT);
@@ -50,6 +51,9 @@ $PAGE->set_url('/mod/forum/post.php', array(
     'name'  => $name,
     'confirm' => $confirm,
     'groupid' => $groupid,
+    'calificate'=> $calificate,
+    'idpost'  => $idpost,
+
 ));
 // These page_params will be passed as hidden variables later in the form.
 $pageparams = array('reply' => $reply, 'forum' => $forum, 'edit' => $edit);
@@ -649,7 +653,71 @@ if (!empty($forum)) {
 
     echo $OUTPUT->footer();
     die;
-} else {
+}elseif(!empty($calificate)) {
+    // CALIFICATE.
+
+    
+    $course = $DB->get_field_sql( "SELECT course
+            FROM mdl_forum_discussions
+            WHERE id = ( SELECT discussion from mdl_forum_posts where id = $idpost)");
+    $userpost = $DB->get_field_sql( "SELECT userid
+            FROM mdl_forum_posts
+            WHERE id  = $idpost");
+
+    $qualExists = $DB->record_exists_sql(" SELECT id FROM mdl_post_qualifications WHERE id_post = $idpost");
+    if ($qualExists){
+        switch ($calificate) {
+            case 'negative':
+                echo "i es igual a 0";
+                break;
+            case 1:
+                echo "i es igual a 1";
+                break;
+            case 2:
+                echo "i es igual a 2";
+                break;
+        }
+    }
+    else{
+        $newQual = new stdClass();
+        $newQual->id_post = $idpost;
+        switch ($calificate) {
+            case 'negative':
+                $newQual->qualification  = -1;
+                break;
+            case 'positive':
+                $newQual->qualification  = 1;
+                break;
+            case 'like':
+                $newQual->qualification  = 0;
+                $newQual->n_likes  = 0;
+                $aaa = new stdClass();
+
+                $newQual->likes_userid  = array($USER->id);
+                break;
+        }
+
+
+        $newidQual = $DB->insert_record('post_qualifications', $newQual);
+    }
+
+
+
+
+    //Add some experience to user who calificate
+    core_user::user_add_experience_to_total_and_course($USER->id, 5,$course );   
+
+    core_user::user_add_experience_to_total_and_course($userpost, 10,$course );   
+
+
+    $postentity = $postvault->get_from_id($idpost);
+    $discussionentity = $discussionvault->get_from_id($postentity->get_discussion_id());
+    redirect(forum_go_back_to($urlfactory->get_discussion_view_url_from_discussion($discussionentity)));
+
+
+} 
+
+else {
     print_error('unknowaction');
 
 }
