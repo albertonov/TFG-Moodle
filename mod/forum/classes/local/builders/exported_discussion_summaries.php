@@ -163,11 +163,14 @@ class exported_discussion_summaries {
 
         $exportedposts = (array) $summaryexporter->export($this->renderer);
         $firstposts = $postvault->get_first_post_for_discussion_ids($discussionids);
+        try {
+            array_walk($exportedposts['summaries'], function($summary) use ($firstposts, $latestposts) {
+                $summary->discussion->times['created'] = (int) $firstposts[$summary->discussion->firstpostid]->get_time_created();
+                $summary->discussion->times['modified'] = (int) $latestposts[$summary->discussion->id]->get_time_created();
+            });
+        } catch (Exception $e) {
+        }
 
-        array_walk($exportedposts['summaries'], function($summary) use ($firstposts, $latestposts) {
-            $summary->discussion->times['created'] = (int) $firstposts[$summary->discussion->firstpostid]->get_time_created();
-            $summary->discussion->times['modified'] = (int) $latestposts[$summary->discussion->id]->get_time_created();
-        });
 
         // Pass the current, preferred sort order for the discussions list.
         $discussionlistvault = $this->vaultfactory->get_discussions_in_forum_vault();
