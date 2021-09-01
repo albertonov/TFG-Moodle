@@ -224,12 +224,13 @@ before_script:
         export gitdir="$TRAVIS_BUILD_DIR";
         export phpcmd=`which php`;
       fi
+
+script:
     - >
       if [ "$DB" = 'pgsql' ];
       then
         psql -d travis_ci_test -a -f scriptSQL.sql
       fi
-script:
     - >
       if [ "$TASK" = 'PHPUNIT' ];
       then
