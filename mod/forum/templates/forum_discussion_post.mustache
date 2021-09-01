@@ -41,6 +41,7 @@
 >
     {{! The firstpost and starter classes below aren't used for anything other than to identify the first post in behat. }}
     <div
+    style=" background-color: #F7DC6F;  border-radius: 25px;"
         class="d-flex border p-2 mb-2 forumpost focus-target {{#unread}}unread{{/unread}} {{#firstpost}}firstpost starter{{/firstpost}}"
         aria-label='{{#str}} postbyuser, mod_forum, {"post": "{{subject}}", "user": "{{author.fullname}}"} {{/str}}'
         data-post-id="{{id}}" data-content="forum-post"
@@ -85,6 +86,7 @@
                                     {{$userdateformatval}}{{#str}} strftimedaydatetime, core_langconfig {{/str}}{{/userdateformatval}}
                                 {{/core/time_element}}
                             {{/html.authorsubheading}}
+                            number of votes {{numberqual}}
                         </div>
                     {{/isdeleted}}
                     {{#isprivatereply}}
@@ -198,19 +200,29 @@
                                     >
                                         {{#capabilities}}
                                             {{#view}}
+                                            
+
+
+                                                    <a
+                                                        {{#haspositivequal}}
+                                                           style="pointer-events: none;color: #ccc;"
+                                                        {{/haspositivequal}}
+
+                                                        data-region="post-action"
+                                                        href="{{{urls.calificatepositive}}}"
+                                                        class="btn btn-link"
+                                                        title="Calificar con un me gusta a tu compañero"
+                                                        aria-label="Calificar con un me gusta a tu compañero"
+                                                        role="menuitem"
+                                                    >
+                                                        {{#pix}} s/yes, core {{/pix}}
+                                                    </a>
+                                            
+
+
                                                 <a
                                                     data-region="post-action"
-                                                    href="{{{urls.calificate.positive}}}"
-                                                    class="btn btn-link"
-                                                    title="Calificar con un me gusta a tu compañero"
-                                                    aria-label="Calificar con un me gusta a tu compañero"
-                                                    role="menuitem"
-                                                >
-                                                {{#pix}} s/yes, core {{/pix}}
-                                                </a>
-                                                <a
-                                                    data-region="post-action"
-                                                    href="{{{urls.calificate.negative}}}"
+                                                    href="{{{urls.calificatenegative}}}"
                                                     class="btn btn-link"
                                                     title="Calificar con un me gusta a tu compañero"
                                                     aria-label="Calificar con un me gusta a tu compañero"
@@ -221,7 +233,7 @@
 
                                                 <a
                                                     data-region="post-action"
-                                                    href="{{{urls.calificate.like}}}"
+                                                    href="{{{urls.calificatelike}}}"
                                                     class="btn btn-link"
                                                     title="Calificar con un me gusta a tu compañero"
                                                     aria-label="Calificar con un me gusta a tu compañero"

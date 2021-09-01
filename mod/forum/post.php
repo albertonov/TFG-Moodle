@@ -660,43 +660,31 @@ if (!empty($forum)) {
     $course = $DB->get_field_sql( "SELECT course
             FROM mdl_forum_discussions
             WHERE id = ( SELECT discussion from mdl_forum_posts where id = $idpost)");
+    
     $userpost = $DB->get_field_sql( "SELECT userid
             FROM mdl_forum_posts
             WHERE id  = $idpost");
 
-    $qualExists = $DB->record_exists_sql(" SELECT id FROM mdl_post_qualifications WHERE id_post = $idpost");
+    $qualExists = $DB->record_exists_sql(" SELECT id FROM mdl_post_qualifications WHERE id_post = $idpost and id_user = $USER->id ");
     if ($qualExists){
-        switch ($calificate) {
-            case 'negative':
-                echo "i es igual a 0";
-                break;
-            case 1:
-                echo "i es igual a 1";
-                break;
-            case 2:
-                echo "i es igual a 2";
-                break;
+        //modificamos la calificacion
+        $oldQual = $DB->get_record_sql("SELECT id, qual FROM mdl_post_qualifications WHERE id_post = $idpost and id_user = $USER->id ");
+        
+        if($oldQual->qual !=  $calificate){
+            $newQual = new stdClass();
+            $newQual->id = $oldQual->id;
+            $newQual->id_post = $idpost;
+            $newQual->id_user = $USER->id;
+            $newQual->qual = $calificate;
+            $DB->update_record('post_qualifications', $newQual);
         }
     }
     else{
+        //añadimos una nueva calificacion
         $newQual = new stdClass();
         $newQual->id_post = $idpost;
-        switch ($calificate) {
-            case 'negative':
-                $newQual->qualification  = -1;
-                break;
-            case 'positive':
-                $newQual->qualification  = 1;
-                break;
-            case 'like':
-                $newQual->qualification  = 0;
-                $newQual->n_likes  = 0;
-                $aaa = new stdClass();
-
-                $newQual->likes_userid  = array($USER->id);
-                break;
-        }
-
+        $newQual->id_user = $USER->id;
+        $newQual->qual = $calificate;
 
         $newidQual = $DB->insert_record('post_qualifications', $newQual);
     }

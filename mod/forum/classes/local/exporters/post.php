@@ -115,6 +115,14 @@ class post extends exporter {
             'isdeleted' => ['type' => PARAM_BOOL],
             'isprivatereply' => ['type' => PARAM_BOOL],
             'haswordcount' => ['type' => PARAM_BOOL],
+            'hasnegativequal' => ['type' => PARAM_BOOL],
+            'haspositivequal' => ['type' => PARAM_BOOL],
+            'haslikequal' => ['type' => PARAM_BOOL],
+            'hasemptyqual' => ['type' => PARAM_BOOL],
+            'numberqual' => ['type' => PARAM_INT],
+
+
+            
             'wordcount' => [
                 'type' => PARAM_INT,
                 'optional' => true,
@@ -400,6 +408,19 @@ class post extends exporter {
         $calificatepositiveurl = $urlfactory->get_calificate_url_from_post($post, 'positive');
         $calificatelikeurl = $urlfactory->get_calificate_url_from_post($post, 'like');
 
+
+
+        
+        $hasqual = $forum->has_qualification_emited($post->get_id(), $user->id);
+        
+
+        $numberofqual = $forum->get_qualification_number($post->get_id());
+        
+        
+        #print_error($forum->get_qualification_users($post->get_id())[2]);
+
+
+        #$hasqual === "positive" ? print_error($hasqual) : false;
         $authorexporter = new author_exporter(
             $author,
             $authorcontextid,
@@ -454,6 +475,14 @@ class post extends exporter {
             'haswordcount' => $showwordcount,
             'wordcount' => $wordcount,
             'charcount' => $charcount,
+            
+            'hasnegativequal' => $hasqual === "negative" ? true : false,
+            'haspositivequal' => $hasqual === "positive" ? true : false,
+            'haslikequal' => $hasqual === "like" ? true : false,
+            'hasemptyqual' => $hasqual === "empty" ? true : false,
+            'numberqual' => $numberofqual,
+
+
             'capabilities' => [
                 'view' => $canview,
                 'edit' => $canedit,
@@ -471,12 +500,17 @@ class post extends exporter {
                 'viewparent' => $viewparenturl ? $viewparenturl->out(false) : null,
                 'edit' => $editurl ? $editurl->out(false) : null,
                 'delete' => $deleteurl ? $deleteurl->out(false) : null,
+                /*
                 'calificate' => [
                     'like' => $calificatelikeurl,
                     'positive' => $calificatepositiveurl,
                     'negative' => $calificatenegativeurl 
                 ],
-                
+                */
+                'calificatelike' => $calificatelikeurl,
+                'calificatenegative' => $calificatenegativeurl,
+                'calificatepositive' => $calificatepositiveurl,
+
                 'split' => $spliturl ? $spliturl->out(false) : null,
                 'reply' => $replyurl ? $replyurl->out(false) : null,
                 'export' => $exporturl && $exporturl ? $exporturl->out(false) : null,
