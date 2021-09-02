@@ -1165,7 +1165,7 @@ class core_user {
 
         $DB->execute("UPDATE {user_enrolments}
         SET courseexperience = courseexperience + $experience
-        where userid = $userid and enrolid in ( SELECT id from mdl_enrol where courseid = $course)
+        where userid = $userid and enrolid in ( SELECT id from {enrol} where courseid = $course)
         ");
         return true;
     }
