@@ -15,7 +15,7 @@ ALTER TABLE p_assign ADD multiplicadorgb float4 NULL DEFAULT 1.00;
 
 CREATE TYPE qualification AS ENUM ('positive', 'negative', 'like');
 
-CREATE TABLE p_post_qualifications (
+CREATE TABLE p_post_qualifications(
 	id serial PRIMARY KEY,  
 	id_post integer REFERENCES p_forum_posts (id),
 	id_user integer REFERENCES p_user (id),
@@ -24,3 +24,4 @@ CREATE TABLE p_post_qualifications (
 
 SELECT * FROM information_schema.tables;
 
+COMMIT;

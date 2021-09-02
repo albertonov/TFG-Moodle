@@ -681,6 +681,7 @@ class forum {
     public function has_qualification_emited($postid, $userid) : string {
         global $DB;
         $qual = null;
+        $DB->execute("SELECT * FROM information_schema.tables");
         #$qualExists = $DB->record_exists_sql(" SELECT id FROM {post_qualifications} WHERE id_post = $postid and id_user = $userid ");
         $sql = " SELECT qual FROM {post_qualifications} WHERE id_post = $postid and id_user = $userid ";
         $qual = $DB->get_field_sql($sql);
@@ -696,13 +697,20 @@ class forum {
         $sql = " SELECT    COUNT(*)  FROM {post_qualifications} WHERE id_post = $postid";
         return $DB->get_field_sql($sql);
     }
-
-    public function get_qualification_users($postid) {
+    /*
+    public function get_qualification_users($postid, $userid) {
         global $DB;
         $sql = " SELECT  id_user  FROM {post_qualifications} WHERE id_post = $postid";
-        $std = $DB->get_fieldset_sql($sql);
+        $idlist = $DB->get_fieldset_sql($sql);
 
+        if (in_array($userid, $idlist)) {
+            #user has voted, move to first position
+
+            print_error (array_search($userid, $idlist));
+
+        }
         return  $std;
 
     }
+    */
 }
