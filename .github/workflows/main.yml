@@ -1,0 +1,51 @@
+name: Moodle Plugin CI
+
+
+on: [push, pull_request]
+
+
+jobs:
+  #test deploy 
+  test:
+
+    #indicamos el tipo de OS de la MV
+    runs-on: ubuntu-18.04
+
+    
+    services:
+      #servicio base de datos para la ejecucion de pruebas
+      postgres:
+        image: postgres:10
+        
+        env:
+          #usuario de la base de datos
+          POSTGRES_USER: 'postgres'
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+
+strategy:
+      fail-fast: false
+      #contruccion de la matriz
+      #para cada opcion de cada linea, se combina con una opcion del resto de filas.
+      matrix:
+        php: ['7.3', '7.4']
+        moodle-branch: ['feature/gamificationModule', 'dev']
+        database: [pgsql]
+
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          path: plugin
+
+      #instalacion de la version de PHP correspondiente
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ matrix.extensions }}
+          ini-values: max_input_vars=5000
+          coverage: none
