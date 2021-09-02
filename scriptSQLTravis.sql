@@ -1,6 +1,8 @@
---Añadido campo de experiencia en mdl_user
---SELECT * FROM information_schema.tables;
+--Script de creacion de base de datos con los datos del plugin.
+-- SOlo para travis
 
+
+--Añadido campo de experiencia en mdl_user
 ALTER TABLE p_user ADD totalexperience int8 NULL DEFAULT 0;
 
 --Añadido campo de experiencia en mdl_user_enrolments
@@ -15,13 +17,9 @@ ALTER TABLE p_assign ADD multiplicadorgb float4 NULL DEFAULT 1.00;
 
 CREATE TYPE qualification AS ENUM ('positive', 'negative', 'like');
 
-CREATE TABLE post_qualifications(
+CREATE TABLE p_post_qualifications(
 	id serial PRIMARY KEY,  
 	id_post integer REFERENCES p_forum_posts (id),
 	id_user integer REFERENCES p_user (id),
 	qual qualification
 );
-
-SELECT * FROM information_schema.tables;
-
-COMMIT;

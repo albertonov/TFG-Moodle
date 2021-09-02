@@ -232,11 +232,6 @@ before_script:
 
 script:
     - >
-      if [ "$DB" = 'pgsql' ];
-      then
-        psql -U postgres -d travis_ci_test -a -f script2.sql;
-      fi
-    - >
       if [ "$TASK" = 'PHPUNIT' ];
       then
         vendor/bin/phpunit --fail-on-risky --disallow-test-output --verbose --filter mod_forum_external_testcase;
