@@ -112,6 +112,17 @@ abstract class advanced_testcase extends base_testcase {
                 phpunit_util::$lastdbwrites = $DB->perf_get_writes(); // no db reset necessary
             }
             self::resetAllData(null);
+            $DB->execute(
+                "
+                CREATE table phpu_post_qualifications(
+                    id serial PRIMARY KEY,  
+                    id_post integer REFERENCES phpu_forum_posts (id),
+                    id_user integer REFERENCES phpu_user (id),
+                    qual qualification
+                )
+                "
+            );
+
 
         } else if ($this->resetAfterTest === false) {
             if ($this->testdbtransaction) {
