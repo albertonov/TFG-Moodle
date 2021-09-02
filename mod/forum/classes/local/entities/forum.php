@@ -681,8 +681,8 @@ class forum {
     public function has_qualification_emited($postid, $userid) : string {
         global $DB;
         $qual = null;
-        #$qualExists = $DB->record_exists_sql(" SELECT id FROM mdl_post_qualifications WHERE id_post = $postid and id_user = $userid ");
-        $sql = " SELECT qual FROM mdl_post_qualifications WHERE id_post = $postid and id_user = $userid ";
+        #$qualExists = $DB->record_exists_sql(" SELECT id FROM {post_qualifications} WHERE id_post = $postid and id_user = $userid ");
+        $sql = " SELECT qual FROM {post_qualifications} WHERE id_post = $postid and id_user = $userid ";
         $qual = $DB->get_field_sql($sql);
         if ( empty($qual)){
             return "empty";
@@ -693,13 +693,13 @@ class forum {
 
     public function get_qualification_number($postid) : int {
         global $DB;
-        $sql = " SELECT    COUNT(*)  FROM mdl_post_qualifications WHERE id_post = $postid";
+        $sql = " SELECT    COUNT(*)  FROM {post_qualifications} WHERE id_post = $postid";
         return $DB->get_field_sql($sql);
     }
 
     public function get_qualification_users($postid) {
         global $DB;
-        $sql = " SELECT  id_user  FROM mdl_post_qualifications WHERE id_post = $postid";
+        $sql = " SELECT  id_user  FROM {post_qualifications} WHERE id_post = $postid";
         $std = $DB->get_fieldset_sql($sql);
 
         return  $std;

@@ -658,17 +658,17 @@ if (!empty($forum)) {
 
     
     $course = $DB->get_field_sql( "SELECT course
-            FROM mdl_forum_discussions
-            WHERE id = ( SELECT discussion from mdl_forum_posts where id = $idpost)");
+            FROM {forum_discussions}
+            WHERE id = ( SELECT discussion from {forum_posts} where id = $idpost)");
     
     $userpost = $DB->get_field_sql( "SELECT userid
-            FROM mdl_forum_posts
+            FROM {forum_posts}
             WHERE id  = $idpost");
 
-    $qualExists = $DB->record_exists_sql(" SELECT id FROM mdl_post_qualifications WHERE id_post = $idpost and id_user = $USER->id ");
+    $qualExists = $DB->record_exists_sql(" SELECT id FROM {post_qualifications} WHERE id_post = $idpost and id_user = $USER->id ");
     if ($qualExists){
         //modificamos la calificacion
-        $oldQual = $DB->get_record_sql("SELECT id, qual FROM mdl_post_qualifications WHERE id_post = $idpost and id_user = $USER->id ");
+        $oldQual = $DB->get_record_sql("SELECT id, qual FROM {post_qualifications} WHERE id_post = $idpost and id_user = $USER->id ");
         
         if($oldQual->qual !=  $calificate){
             $newQual = new stdClass();
