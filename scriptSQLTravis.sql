@@ -23,13 +23,3 @@ CREATE TABLE p_post_qualifications (
 );
 
 
-
-
-CREATE TABLE p_post_qualifications (
-	id serial PRIMARY KEY,  
-	id_post integer REFERENCES p_forum_posts (id),
-	id_user integer REFERENCES p_user (id),
-	qual qualification
-);
-
-
