@@ -22,4 +22,5 @@ CREATE TABLE p_post_qualifications (
 	qual qualification
 );
 
+SELECT * FROM information_schema.tables;
 
