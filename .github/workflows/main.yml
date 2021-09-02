@@ -31,7 +31,6 @@ strategy:
       #para cada opcion de cada linea, se combina con una opcion del resto de filas.
       matrix:
         php: ['7.3', '7.4']
-        moodle-branch: ['feature/gamificationModule', 'dev']
         database: [pgsql]
 
 
@@ -49,3 +48,39 @@ strategy:
           extensions: ${{ matrix.extensions }}
           ini-values: max_input_vars=5000
           coverage: none
+      
+      #instalacion de PostgresSQL
+ 
+      - if: ${{ matrix.db == 'pgsql' }}
+        uses: m4nu56/postgresql-action@v1
+        with:
+          postgresql version: 9.6
+          postgresql db: testdb
+          postgresql user: test
+          postgresql password: test
+
+      #instalacion de PhpUnit
+      - name: Setting up PHPUnit
+        env:
+          dbtype: ${{ matrix.db }}
+        run: |
+          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
+          cp .github/workflows/config-template.php config.php
+          mkdir ../moodledata
+          sudo locale-gen en_AU.UTF-8
+          php admin/tool/phpunit/cli/init.php --no-composer-self-update
+      
+      
+      #uso del script de la base de datos 
+      - name: Setting up PHPUnit
+        env:
+          dbtype: ${{ matrix.db }}
+        run:  psql -U postgres -d testdb -a -f scriptSQLTravis.sql;
+
+
+
+      #ejecucion de pruebas unitarias
+      - name: Running PHPUnit tests
+        env:
+          dbtype: ${{ matrix.db }}
+        run: vendor/bin/phpunit -v
