@@ -1,4 +1,3 @@
-name: Moodle Plugin CI
 
 
 on: [push, pull_request]
@@ -30,7 +29,7 @@ jobs:
       #contruccion de la matriz
       #para cada opcion de cada linea, se combina con una opcion del resto de filas.
       matrix:
-        php: ['7.3', '7.4']
+        php: ['7.3']
         database: [pgsql]
 
     steps:
@@ -63,11 +62,32 @@ jobs:
         env:
           dbtype: ${{ matrix.db }}
         run: |
-          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
-          cp .github/workflows/config-template.php config.php
-          mkdir ../moodledata
-          sudo locale-gen en_AU.UTF-8
-          php admin/tool/phpunit/cli/init.php --no-composer-self-update
+          # Create a directory for the phpunit dataroot.
+          mkdir -p ../roots/phpunit
+
+          # The phpunit dataroot and prefix..
+          sed -i \
+            -e "/require_once/i \\\$CFG->phpunit_dataroot = '\/home\/travis\/roots\/phpunit';" \
+            -e "/require_once/i \\\$CFG->phpunit_prefix = 'p_';" \
+            config.php ;
+          # Enable test external resources
+          sed -i \
+            -e "/require_once/i \\define('TEST_EXTERNAL_FILES_HTTP_URL', 'http://127.0.0.1:8080');" \
+            -e "/require_once/i \\define('TEST_EXTERNAL_FILES_HTTPS_URL', 'http://127.0.0.1:8080');" \
+            config.php ;
+
+          # Redis cache store tests
+          sed -i \
+            -e "/require_once/i \\define('TEST_CACHESTORE_REDIS_TESTSERVERS', '127.0.0.1');" \
+            config.php ;
+          # Redis session tests, but not for PHP 7.2 and up. See MDL-60978 for more info.
+          redissession="define('TEST_SESSION_REDIS_HOST', '127.0.0.1');"
+          sed -i \
+            -e "/require_once/i \\${redissession}" \
+            config.php ;
+
+          # Initialise PHPUnit for Moodle.
+          php admin/tool/phpunit/cli/init.php
       
       
       #uso del script de la base de datos 
