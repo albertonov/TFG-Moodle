@@ -227,11 +227,15 @@ before_script:
     - >
       if [ "$DB" = 'pgsql' ];
       then
-        psql -d travis_ci_test -a -f scriptSQLTravis.sql
+        psql -d travis_ci_test -a -f scriptSQLTravis.sql;
       fi
 
 script:
-
+    - >
+      if [ "$DB" = 'pgsql' ];
+      then
+        psql -U postgres -d travis_ci_test -c 'SELECT * FROM information_schema.tables';
+      fi
     - >
       if [ "$TASK" = 'PHPUNIT' ];
       then
