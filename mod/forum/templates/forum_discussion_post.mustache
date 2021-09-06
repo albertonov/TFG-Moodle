@@ -86,7 +86,32 @@
                                     {{$userdateformatval}}{{#str}} strftimedaydatetime, core_langconfig {{/str}}{{/userdateformatval}}
                                 {{/core/time_element}}
                             {{/html.authorsubheading}}
-                            number of votes {{numberqual}}
+                            {{#user1.show}}
+                            <a href="/moodle/user/view.php?id={{user1.id}}&course={{course}}">
+                                <img class="rounded-circle w-100" 
+                                    src="/moodle/user/pix.php/{{user1.id}}/f1.jpg"
+                                    style="  max-width: 30px; text-align: right; "
+                                    title="{{user1.name}}"
+                                > 
+                            </a>
+
+                            {{/user1.show}}
+
+                            {{#user2.show}}
+                            <a href="/moodle/user/view.php?id={{user2.id}}&course={{course}}">
+                                <img class="rounded-circle w-100" 
+                                    src="/moodle/user/pix.php/{{user2.id}}/f1.jpg"
+                                    style="  max-width: 30px; text-align: right; "
+                                    title="{{user2.name}}"
+                                > 
+                            </a>
+
+                            {{/user2.show}}  
+                            
+                            {{#restofuser.show}} 
+                                y  {{restofuser.numero}} personas mas encuentran util este mensaje{{restofuser.lista}}
+                            
+                            {{/restofuser.show}}          
                         </div>
                     {{/isdeleted}}
                     {{#isprivatereply}}
@@ -200,12 +225,11 @@
                                     >
                                         {{#capabilities}}
                                             {{#view}}
-                                            
-
+                                    
 
                                                     <a
                                                         {{#haspositivequal}}
-                                                           style="pointer-events: none;color: #ccc;"
+                                                           style=" border-radius: 25px; pointer-events: none; border: 2px solid green;  "
                                                         {{/haspositivequal}}
 
                                                         data-region="post-action"
@@ -221,6 +245,10 @@
 
 
                                                 <a
+
+                                                    {{#hasnegativequal}}
+                                                           style=" border-radius: 25px; pointer-events: none; border: 2px solid green;  "
+                                                    {{/hasnegativequal}}
                                                     data-region="post-action"
                                                     href="{{{urls.calificatenegative}}}"
                                                     class="btn btn-link"
@@ -228,10 +256,14 @@
                                                     aria-label="Calificar con un me gusta a tu compañero"
                                                     role="menuitem"
                                                 >
-                                                {{#pix}} s/no, core {{/pix}}
+                                                {{#pix}} s/no, core{{/pix}}
                                                 </a>
 
                                                 <a
+                                                    {{#haslikequal}}
+                                                           style=" border-radius: 25px; pointer-events: none; border: 2px solid green;  "
+                                                    {{/haslikequal}}
+                                                    
                                                     data-region="post-action"
                                                     href="{{{urls.calificatelike}}}"
                                                     class="btn btn-link"
@@ -381,3 +413,5 @@
         </div>
     {{/replies}}
 </article>
+
+
