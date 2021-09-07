@@ -740,6 +740,26 @@ class assign {
         if (empty($update->markingworkflow)) { // If marking workflow is disabled, make sure allocation is disabled.
             $update->markingallocation = 0;
         }
+        if (isset($formdata->GamificationEnabled))  {
+            $update->isgamebased = $formdata->GamificationEnabled ;
+
+            if (isset($formdata->multiplicador)) {
+                switch ($formdata->multiplicador) {
+                    case 0:
+                        $update->multiplicadorgb = 0.75;
+                        break;
+                    case 1:
+                        $update->multiplicadorgb = 1.00;
+                        break;
+                    case 2:
+                        $update->multiplicadorgb = 1.25;
+                        break;
+                    case 3:
+                        $update->multiplicadorgb = 1.75;
+                        break;
+                }
+            }
+        } 
 
         $returnid = $DB->insert_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$returnid), '*', MUST_EXIST);
@@ -1484,6 +1504,26 @@ class assign {
         if (empty($update->markingworkflow)) { // If marking workflow is disabled, make sure allocation is disabled.
             $update->markingallocation = 0;
         }
+        if (isset($formdata->GamificationEnabled))  {
+            $update->isgamebased = $formdata->GamificationEnabled ;
+
+            if (isset($formdata->multiplicador)) {
+                switch ($formdata->multiplicador) {
+                    case 0:
+                        $update->multiplicadorgb = 0.75;
+                        break;
+                    case 1:
+                        $update->multiplicadorgb = 1.00;
+                        break;
+                    case 2:
+                        $update->multiplicadorgb = 1.25;
+                        break;
+                    case 3:
+                        $update->multiplicadorgb = 1.75;
+                        break;
+                }
+            }
+        } 
 
         $result = $DB->update_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$update->id), '*', MUST_EXIST);
@@ -7367,6 +7407,10 @@ class assign {
         return true;
     }
 
+
+
+
+    
     /**
      * Save assignment submission for the current user.
      *
@@ -7382,7 +7426,7 @@ class assign {
         if (!empty($data->userid)) {
             $userid = $data->userid;
         }
-
+        
         $user = clone($USER);
         if ($userid == $USER->id) {
             require_capability('mod/assign:submit', $this->context);
@@ -7484,6 +7528,11 @@ class assign {
             $this->notify_graders($submission);
             \mod_assign\event\assessable_submitted::create_from_submission($this, $submission, true)->trigger();
         }
+        if($instance->isgamebased) {
+            $expGained = $instance->multiplicadorgb * 15;
+            core_user::user_add_experience_to_total_and_course($userid, $expGained,$instance->course );   
+        }
+     
         return true;
     }
 
@@ -7509,7 +7558,7 @@ class assign {
             return false;
         }
         $instance = $this->get_instance();
-
+        
         $data = new stdClass();
         $data->userid = $userid;
         $mform = new mod_assign_submission_form(null, array($this, $data));

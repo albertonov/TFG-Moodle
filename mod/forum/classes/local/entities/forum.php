@@ -669,4 +669,48 @@ class forum {
 
         return $this->is_discussion_time_locked($discussion);
     }
+
+
+
+    /**
+     * Hay alguna votacion ya emitida? - Takes into account both discussion settings AND forum's criteria
+     *
+     * @param discussion_entity $discussion The discussion to check
+     * @return bool
+     */
+    public function has_qualification_emited($postid, $userid) : string {
+        global $DB;
+        $qual = null;
+        #$qualExists = $DB->record_exists_sql(" SELECT id FROM {post_qualifications} WHERE id_post = $postid and id_user = $userid ");
+        $sql = " SELECT qual FROM {post_qualifications} WHERE id_post = $postid and id_user = $userid ";
+        $qual = $DB->get_field_sql($sql);
+        if ( empty($qual)){
+            return "empty";
+        }
+        return $qual;
+    }
+
+
+    public function get_qualification_number($postid) : int {
+        global $DB;
+        $sql = " SELECT    COUNT(*)  FROM {post_qualifications} WHERE id_post = $postid";
+        return $DB->get_field_sql($sql);
+    }
+    
+    public function get_qualification_users($postid, $userid) {
+        
+        global $DB;
+        $sql = " SELECT  id_user  FROM {post_qualifications} WHERE id_post = $postid";
+        $idlist = $DB->get_fieldset_sql($sql);
+
+        /*if (in_array($userid, $idlist)) {
+            #user has voted, move to first position
+
+            print_error (array_search($userid, $idlist));
+
+        }*/
+        return  $idlist;
+        
+    }
+    
 }

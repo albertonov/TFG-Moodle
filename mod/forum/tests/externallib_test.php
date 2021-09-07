@@ -695,6 +695,7 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
             'haswordcount' => true,
             'wordcount' => count_words($message),
             'charcount' => count_letters($message),
+
             'author'=> $exporteduser3,
             'attachments' => [],
             'tags' => [],
@@ -729,6 +730,11 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                 'markasunread' => null,
                 'discuss' => $urlfactory->get_discussion_view_url_from_discussion_id($discussion1reply2->discussion),
             ],
+            'hasnegativequal' => false,
+            'haspositivequal' => false,
+            'haslikequal' => false,
+            'hasemptyqual' => true,
+            'numberqual' => 0,
         );
 
 
@@ -786,6 +792,11 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                 'markasunread' => null,
                 'discuss' => $urlfactory->get_discussion_view_url_from_discussion_id($discussion1reply1->discussion),
             ],
+            'hasnegativequal' => false,
+            'haspositivequal' => false,
+            'haslikequal' => false,
+            'hasemptyqual' => true,
+            'numberqual' => 0,
         );
 
         // Test a discussion with two additional posts (total 3 posts).
@@ -2816,6 +2827,11 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'discuss' => $urlfactory->get_discussion_view_url_from_discussion_id(
                                 $discussion1reply1->discussion)->out(false),
                         ],
+                        'hasnegativequal' => false,
+                        'haspositivequal' => false,
+                        'haslikequal' => false,
+                        'hasemptyqual' => true,
+                        'numberqual' => 0,
                     ]
                 ],
                 'parentposts' => [
@@ -2877,6 +2893,11 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'discuss' => $urlfactory->get_discussion_view_url_from_discussion_id(
                                 $discussion1firstpostobject->discussion)->out(false),
                         ],
+                        'hasnegativequal' => false,
+                        'haspositivequal' => false,
+                        'haslikequal' => false,
+                        'hasemptyqual' => true,
+                        'numberqual' => 0,
                     ]
                 ],
             ],
@@ -2955,6 +2976,11 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'discuss' => $urlfactory->get_discussion_view_url_from_discussion_id(
                                 $discussion2reply1->discussion)->out(false),
                         ],
+                        'hasnegativequal' => false,
+                        'haspositivequal' => false,
+                        'haslikequal' => false,
+                        'hasemptyqual' => true,
+                        'numberqual' => 0,
                     ]
                 ],
                 'parentposts' => [
@@ -3016,7 +3042,13 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'discuss' => $urlfactory->get_discussion_view_url_from_discussion_id(
                                 $discussion2firstpostobject->discussion)->out(false),
 
-                        ]
+                            ],
+                            'hasnegativequal' => false,
+                            'haspositivequal' => false,
+                            'haslikequal' => false,
+                            'hasemptyqual' => true,
+                            'numberqual' => 0
+                        
                     ],
                 ]
             ],

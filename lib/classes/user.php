@@ -1157,4 +1157,19 @@ class core_user {
         }
     }
 
+    static function user_add_experience_to_total_and_course($userid, $experience, $course) {
+        global $DB;
+        $DB->execute("UPDATE {user}
+        SET totalExperience = totalExperience + $experience
+        WHERE $userid = id");
+
+        $DB->execute("UPDATE {user_enrolments}
+        SET courseexperience = courseexperience + $experience
+        where userid = $userid and enrolid in ( SELECT id from {enrol} where courseid = $course)
+        ");
+        return true;
+    }
+    
+
+
 }
