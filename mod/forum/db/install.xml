@@ -216,5 +216,18 @@ Can be determined by scales/advancedgradingforms etc but will always be converte
         <INDEX NAME="forumusergrade" UNIQUE="true" FIELDS="forum, itemnumber, userid"/>
       </INDEXES>
     </TABLE>
+    <TABLE NAME="post_qualifications" COMMENT="">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="id_post" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="id_user" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="qual" TYPE="text"  NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="id_post" TYPE="foreign" FIELDS="id_post" REFTABLE="forum_posts" REFFIELDS="id"/>
+        <KEY NAME="id_user" TYPE="foreign" FIELDS="id_user" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
   </TABLES>
 </XMLDB>
