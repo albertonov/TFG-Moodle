@@ -14,10 +14,12 @@ class block_level extends block_base {
         global $USER;
 
 
-        $this->content->text =  'holaaaaaaaaaaaaaaaaa';
-        
+        $renderable = new \block_level\output\level($this->config);
+        $renderer = $this->page->get_renderer('block_level');
 
-
+        $this->content = new stdClass();
+        $this->content->text = $renderer->render($renderable);
+        $this->content->footer = '';
         return $this->content;
     }
 

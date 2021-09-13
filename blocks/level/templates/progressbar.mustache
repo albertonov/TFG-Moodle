@@ -1,3 +1,13 @@
-<label for="file">File progress:</label>
+<div class="progress">
+  <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+  aria-valuenow="{{percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{percentage}}%">
+    {{#showcompletemessage}}
+        {{percentage}}% completado
+    {{/showcompletemessage}}
+    {{#showpercentageonbar}}
+        {{percentage}}%
+    {{/showpercentageonbar}}
+  </div>
+</div>
 
-<progress id="file" max="100" value="70"> 70% </progress>
+{{text}}
