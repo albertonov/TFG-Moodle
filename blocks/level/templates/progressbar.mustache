@@ -1,13 +1,52 @@
-<div class="progress">
-  <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-  aria-valuenow="{{percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{percentage}}%">
-    {{#showcompletemessage}}
-        {{percentage}}% completado
-    {{/showcompletemessage}}
-    {{#showpercentageonbar}}
-        {{percentage}}%
-    {{/showpercentageonbar}}
-  </div>
-</div>
 
-{{text}}
+    {{#istoplevel}}
+      Has alcanzado el máximo nivel, enhorabuena
+    {{/istoplevel}}
+
+    {{^istoplevel}}
+      <span class="progress-label">Nivel {{level}}</span>
+      <span class="pull-right">Nivel {{nextlevel}}</span>
+    {{/istoplevel}}
+
+
+    <div class="progress" style="margin-bottom: 10px;">
+      <div 
+        class="progress-bar progress-bar-success progress-bar-striped" 
+        role="progressbar"
+        aria-valuenow="   
+          {{#istoplevel}}
+            100
+          {{/istoplevel}}
+          {{^istoplevel}}
+              {{percentage}}
+          {{/istoplevel}}
+        "
+        aria-valuemin="0" 
+        aria-valuemax="100" 
+        style="
+          width:    
+            {{#istoplevel}}
+              100
+            {{/istoplevel}}
+            {{^istoplevel}}
+                {{percentage}}%
+            {{/istoplevel}}
+        ">
+          {{#showcompletemessage}}
+              {{percentage}}% completado
+          {{/showcompletemessage}}
+          {{#showpercentageonbar}}
+              {{percentage}}%
+          {{/showpercentageonbar}}
+      </div>
+    </div>
+
+
+
+    <div class="col text-center">
+      <button data-toggle="collapse" data-target="#info" style="font-size: 12px;" class="btn btn-secondary">Saber más...</button>
+    </div>
+
+    <div id="info" class="collapse"  style="font-size: 12px;">
+    {{info}}
+    </div>

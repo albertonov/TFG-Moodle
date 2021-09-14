@@ -123,26 +123,26 @@ class level implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output) {
-        global $USER, $OUTPUT, $DB;
-
-
-        
-
+        global $USER, $OUTPUT;
 
         $data = new \stdClass();
         $userdata = $this->get_current_level_and_experience($USER);
 
         $data->level = $userdata->level;
+        
         $data->experience = $userdata->experience;
         $data->istoplevel = $userdata->level < 6 ? false : true;
-
+        $data->nextlevel = $data->istoplevel ? $userdata->level : $userdata->level + 1;
         $data->top = $userdata->max;
         $data->less = $userdata->min;
         $data->percentage = (($userdata->experience - $userdata->min )  / ($userdata->max - $userdata->min) ) * 100;
-        $data->showcompletemessage = $data->percentage < 26 ? false : true;
-        $data->showpercentageonbar = $data->percentage < 7 ? false : true;
+        $data->showcompletemessage = $data->percentage >= 7 ? true : false;
+        $data->showpercentageonbar = $data->percentage < 7  && $data->percentage >= 0 ? true : false;
 
-        print_r($data);
+        $data->info = get_string('info', 'block_level');
+
+
+        
         return $data;
     }
 }
