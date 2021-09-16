@@ -76,7 +76,7 @@ class block_ranking extends block_base {
         $rolenames = role_get_names($context, ROLENAME_ALIAS, true);
 
 
-        $records = $DB->get_records_sql(' SELECT ue.userid, u.firstname, u.lastname, ue.courseexperience, ue.enrolid, ra.roleid
+        $records = $DB->get_records_sql(' SELECT DISTINCT ue.userid, u.firstname, u.lastname, ue.courseexperience, ue.enrolid, ra.roleid
                                     FROM {user_enrolments} ue 
                                     INNER JOIN {user} u ON ue.userid=u.id
                                     INNER JOIN {role_assignments} ra ON ue.userid = ra.userid
@@ -87,7 +87,7 @@ class block_ranking extends block_base {
                                     )
                                     ORDER BY ue.courseexperience DESC'
                                     , array($course->id));
-            
+        print_r($course->id );
         foreach ($records as $key => $record) {
             if ($records[$key]->roleid != 5 ){
                 unset($records[$key]);
