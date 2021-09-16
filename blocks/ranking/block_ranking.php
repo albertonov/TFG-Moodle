@@ -87,7 +87,7 @@ class block_ranking extends block_base {
                                     )
                                     ORDER BY ue.courseexperience DESC'
                                     , array($course->id));
-        print_r($course->id );
+        #print_r($course->id );
         foreach ($records as $key => $record) {
             if ($records[$key]->roleid != 5 ){
                 unset($records[$key]);
