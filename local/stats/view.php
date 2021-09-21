@@ -1,32 +1,33 @@
 <?php
+global $USER;
 
 require_once(__DIR__. '/../../config.php');
+require_once($CFG->dirroot . '/local/stats/lib.php');
+
 $PAGE->set_url(new moodle_url('/local/stats/view.php'));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title('Tus estadisticas');
+require_login(0, true, null, false);
 
 
 echo $OUTPUT->header();
-$serie1 = new core\chart_series('My series title', [400, 460, 1120, 540]);
 $serie2 = new core\chart_series('My series 222', [333, 888, 1333, 600]);
 
-$chart1example = new \core\chart_pie();
-$chart1example->set_doughnut(true); // Calling set_doughnut(true) we display the chart as a doughnut.
-$chart1example->add_series($serie1);
-$chart1example->set_labels(['2004', '2005', '2006', '2007']);
 
-$chart2example = new core\chart_bar();
-$chart2example->set_stacked(true);
-$chart2example->add_series($serie2);
-$chart2example->set_labels(['2004', '2005', '2006', '2007']);
+$recordsUE = get_user_experience_from_courses($USER->id);
+$doughnotchart = create_experience_chart($recordsUE);
+
+$recordsattendence = get_user_attendance($USER->id, 604800);
+$attendacechart = create_attendance_chart($recordsattendence);
 
 
 $data = new \stdClass();
-$data->chart1 = $OUTPUT->render($chart1example);
-$data->chart2 = $OUTPUT->render($chart2example);
+$data->chart1 = $OUTPUT->render($doughnotchart);
+$data->chart2 = $OUTPUT->render($attendacechart);
 
-#$data->chart = ['chartdata' => json_encode($chart), 'withtable' => true];
+
+$data->qualified_task = get_last_five_grades_qualificated($USER->id);
+$data->mean = get_mean_time_assigns($USER->id);
 
 echo $OUTPUT->render_from_template('local_stats/stats',$data );
-
 echo $OUTPUT->footer();

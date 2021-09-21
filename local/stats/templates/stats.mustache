@@ -1,42 +1,112 @@
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm">
-
-    <button href="#carouselExampleControls" data-slide-to = "0" style="font-size: 12px;" class="btn btn-secondary">Saber más...</button>
-    <button href="#carouselExampleControls" data-slide-to = "1" style="font-size: 12px;" class="btn btn-secondary">Saber más...</button>
+<style>
+  .panel li:nth-child(odd) {
+    background-color: Gainsboro;
+  }
 
 
 
-    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
+  .cal {
+    display: flex;
+    align-items: right;
+  }
+
+  .dt {
+    font-style: italic;
+    display: flex;
+    align-items: right;
+    font-weight: 100;
+
+  }
+</style>
+
+
+
+
+
+<div class="container" >
+  <div class="row" style="margin-left: -5%;margin-right: -5%;">
+    <div class="col-sm-3"  style="padding-left: 0%;padding-right: 0%;">
+      Experiencia
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+      </div>   
+      Calificacion de tus comentarios
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 30%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: 45%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+
+      <hr />
+      Tus datos
+      <p><small> Media de tiempo restante en tareas: {{mean}} </small></p>
+
+
+    </div>
+
+    <div class="col-sm-5">
+      <div class="d-flex justify-content-around">
+        <button href="#carouseldiagrams" data-slide-to="0" style="font-size: 12px;" class="btn btn-secondary">DIAGRAMA
+          1</button>
+        <button href="#carouseldiagrams" data-slide-to="1" style="font-size: 12px;" class="btn btn-secondary">DIAGRAMA
+          2</button>
+      </div>
+
+
+      <div id="carouseldiagrams" class="carousel slide" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
             {{{chart1}}}
-        </div>
-        <div class="carousel-item">
+          </div>
+          <div class="carousel-item">
             {{{chart2}}}
+          </div>
         </div>
-    </div>
-
-
-
+      </div>
 
 
     </div>
+    <div class="col-sm-4">
+      <div class="panel">
 
+        <ul class="list-group">
+          {{#qualified_task}}
 
-    </div>
-    <div class="col-sm">
+          <li class="list-group-item" style="  padding-bottom: 2%;     ">
+            <div class="row">
+              <div class="col-sm">
+                {{#isquiz}}
+                {{#pix}} icon, quiz {{/pix}}
+                {{/isquiz}}
+
+                {{^isquiz}}
+                {{#pix}} icon, assign {{/pix}}
+                {{/isquiz}}
+                <a href="{{url}}">{{name}}</a>
+
+                <span style="font-style: italic;"> - {{coursename}} </span>
+              </div>
+              <div class="cal">
+                {{grade}}
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <div class="dt">
+                  <small>calificado el {{date}}</small>
+                </div>
+              </div>
+            </div>
+
+          </li>
+
+          {{/qualified_task}}
+
+        </ul>
+
+      </div>
 
     </div>
   </div>
 </div>
-
-
-
-<script>
-$(document).ready(function() {
-    alert ("Hola Mundo"); 
-});
-
-</script>
