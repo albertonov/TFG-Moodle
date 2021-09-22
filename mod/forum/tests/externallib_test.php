@@ -735,6 +735,26 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
             'haslikequal' => false,
             'hasemptyqual' => true,
             'numberqual' => 0,
+            'user1' => Array
+            (
+                'id' => null,
+                'name' => null,
+                'show' => null,
+            ),
+            'user2' => Array
+            (
+                'id' => null,
+                'name' => null,
+                'show' => null,
+            ),
+            'restofuser' => Array
+            (
+                'lista' => null,
+                'numero' => null,
+                'show' => null,
+            ),
+            'course'=> strval($course1->id),
+
         );
 
 
@@ -797,6 +817,25 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
             'haslikequal' => false,
             'hasemptyqual' => true,
             'numberqual' => 0,
+            'user1' => Array
+            (
+                'id' => null,
+                'name' => null,
+                'show' => null,
+            ),
+            'user2' => Array
+            (
+                'id' => null,
+                'name' => null,
+                'show' => null,
+            ),
+            'restofuser' => Array
+            (
+                'lista' => null,
+                'numero' => null,
+                'show' => null,
+            ),
+            'course'=> strval($course1->id),
         );
 
         // Test a discussion with two additional posts (total 3 posts).
@@ -804,6 +843,7 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
         $posts = external_api::clean_returnvalue(mod_forum_external::get_discussion_posts_returns(), $posts);
         $this->assertEquals(3, count($posts['posts']));
 
+        #print_r($posts);
         // Unset the initial discussion post.
         array_pop($posts['posts']);
         $this->assertEquals($expectedposts, $posts);
@@ -2832,6 +2872,25 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                         'haslikequal' => false,
                         'hasemptyqual' => true,
                         'numberqual' => 0,
+                        'user1' => Array
+                        (
+                            'id' => null,
+                            'name' => null,
+                            'show' => null,
+                        ),
+                        'user2' => Array
+                        (
+                            'id' => null,
+                            'name' => null,
+                            'show' => null,
+                        ),
+                        'restofuser' => Array
+                        (
+                            'lista' => null,
+                            'numero' => null,
+                            'show' => null,
+                        ),
+                        'course'=> strval($course1->id),
                     ]
                 ],
                 'parentposts' => [
@@ -2898,6 +2957,25 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                         'haslikequal' => false,
                         'hasemptyqual' => true,
                         'numberqual' => 0,
+                        'user1' => Array
+                        (
+                            'id' => null,
+                            'name' => null,
+                            'show' => null,
+                        ),
+                        'user2' => Array
+                        (
+                            'id' => null,
+                            'name' => null,
+                            'show' => null,
+                        ),
+                        'restofuser' => Array
+                        (
+                            'lista' => null,
+                            'numero' => null,
+                            'show' => null,
+                        ),
+                        'course'=> strval($course1->id),
                     ]
                 ],
             ],
@@ -2981,6 +3059,25 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                         'haslikequal' => false,
                         'hasemptyqual' => true,
                         'numberqual' => 0,
+                        'user1' => Array
+                        (
+                            'id' => null,
+                            'name' => null,
+                            'show' => null,
+                        ),
+                        'user2' => Array
+                        (
+                            'id' => null,
+                            'name' => null,
+                            'show' => null,
+                        ),
+                        'restofuser' => Array
+                        (
+                            'lista' => null,
+                            'numero' => null,
+                            'show' => null,
+                        ),
+                        'course'=> strval($course1->id),
                     ]
                 ],
                 'parentposts' => [
@@ -3047,7 +3144,26 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'haspositivequal' => false,
                             'haslikequal' => false,
                             'hasemptyqual' => true,
-                            'numberqual' => 0
+                            'numberqual' => 0,
+                            'user1' => Array
+                            (
+                                'id' => null,
+                                'name' => null,
+                                'show' => null,
+                            ),
+                            'user2' => Array
+                            (
+                                'id' => null,
+                                'name' => null,
+                                'show' => null,
+                            ),
+                            'restofuser' => Array
+                            (
+                                'lista' => null,
+                                'numero' => null,
+                                'show' => null,
+                            ),
+                            'course'=> strval($course1->id),
                         
                     ],
                 ]
