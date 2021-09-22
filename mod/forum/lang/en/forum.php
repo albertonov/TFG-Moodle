@@ -777,3 +777,5 @@ $string['cannotdeletediscussioninsinglediscussion'] = 'You cannot delete the fir
 $string['inpagereplysubject'] = 'Re: {$a}';
 $string['overviewnumpostssince'] = '{$a} posts since last login';
 $string['overviewnumunread'] = '{$a} total unread';
+$string['privacy:metadata:post_qualifications'] = '     ';
+$string['privacy:metadata:post_qualifications:id_user'] = '   '; 

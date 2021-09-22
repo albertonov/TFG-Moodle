@@ -10,3 +10,5 @@ $string['showallranked'] = 'Mostrar todos los alumnos';
 $string['blocktitle'] = 'Cambiar titulo';
 $string['changetitle:default'] = 'Ranking';
 
+$string['privacy:metadata:block'] = 'The ranking block stores all of its data within the block subsystem.';
+$string['privacy:metadata'] = '';

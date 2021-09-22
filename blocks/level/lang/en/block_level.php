@@ -6,3 +6,5 @@ $string['info'] =   'Este bloque te permite ver el nivel de experiencia que tien
                     Tus puntos de experiencia son obtenidos cuando interactuas con Moodle, ya sea a traves de realizar tareas, 
                     postear en foros, calificar a compañeros etc. Tus puntos de experiencia son clasificados en niveles del 1 al 6. ';
 
+$string['privacy:metadata:block'] = 'The level block stores all of its data within the block subsystem.';
+$string['privacy:metadata'] = '';
