@@ -104,12 +104,14 @@ class mod_assign_mod_form extends moodleform_mod {
         $mform->addHelpButton('alwaysshowdescription', 'alwaysshowdescription', 'assign');
         $mform->disabledIf('alwaysshowdescription', 'allowsubmissionsfromdate[enabled]', 'notchecked');
 
+
+
+
         $assignment->add_all_plugin_settings($mform);
-
-        $mform->addElement('header', 'gamificationheader', 'Gamificación');
-        $name =  'Activar gamificación';
+        $name = get_string('gamificationheader', 'assign');
+        $mform->addElement('header', 'gamificationheader',  $name);
+        $name = get_string('gamificationenabled', 'assign');
         $mform->addElement('selectyesno', 'GamificationEnabled', $name);
-
 
         $options = array();
         $options[0] = 'Fácil';
@@ -117,10 +119,14 @@ class mod_assign_mod_form extends moodleform_mod {
         $options[2] = 'Dificil';
         $options[3] = 'Muy dificil';
 
-        $name = 'Grado de Dificultad';
+        $name = get_string('gamificationlevel', 'assign');
         $mform->addElement('select', 'multiplicador', $name, $options);
         $mform->disabledIf('multiplicador', 'GamificationEnabled', 'no');
 
+        $name = get_string('timeestimated', 'assign');
+        $mform->addElement('text', 'timeestimatedtext',  $name, array('size'=>'3    '));
+        $mform->addRule('timeestimatedtext', null, 'numeric', null, 'client');
+        $mform->setType('timeestimatedtext', PARAM_TEXT);
 
 
         $mform->addElement('header', 'submissionsettings', get_string('submissionsettings', 'assign'));

@@ -760,6 +760,8 @@ class assign {
                 }
             }
         } 
+        $update->timeestimated = $formdata->timeestimatedtext;
+
 
         $returnid = $DB->insert_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$returnid), '*', MUST_EXIST);
@@ -2576,6 +2578,7 @@ class assign {
     public static function cron() {
         global $DB;
 
+
         // Only ever send a max of one days worth of updates.
         $yesterday = time() - (24 * 3600);
         $timenow   = time();
@@ -4062,7 +4065,9 @@ class assign {
                                                                      $instance->maxattempts,
                                                                      $this->get_grading_status($userid),
                                                                      $instance->preventsubmissionnotingroup,
-                                                                     $usergroups);
+                                                                     $usergroups,
+                                                                     $instance->timeestimated
+                                                                    );
             $o .= $this->get_renderer()->render($submissionstatus);
         }
 
@@ -4256,7 +4261,8 @@ class assign {
                                                              $instance->maxattempts,
                                                              $this->get_grading_status($userid),
                                                              $instance->preventsubmissionnotingroup,
-                                                             $usergroups);
+                                                             $usergroups,
+                                                             $instance->timeestimated);
             $o .= $this->get_renderer()->render($submissionstatus);
         }
 
@@ -5318,7 +5324,8 @@ class assign {
                                                           $instance->maxattempts,
                                                           $gradingstatus,
                                                           $instance->preventsubmissionnotingroup,
-                                                          $usergroups);
+                                                          $usergroups,
+                                                          $instance->timeestimated);
         return $submissionstatus;
     }
 
@@ -5697,7 +5704,8 @@ class assign {
                 $course->relativedatesmode,
                 $course->startdate,
                 $this->can_grade(),
-                $isvisible
+                $isvisible,
+                $instance->timeestimated
             );
         } else {
             // The active group has already been updated in groups_print_activity_menu().
@@ -5717,7 +5725,8 @@ class assign {
                 $course->relativedatesmode,
                 $course->startdate,
                 $this->can_grade(),
-                $isvisible
+                $isvisible,
+                $instance->timeestimated
             );
         }
 
