@@ -760,7 +760,10 @@ class assign {
                 }
             }
         } 
-        $update->timeestimated = $formdata->timeestimatedtext;
+        if (isset($formdata->timeestimatedtext)) {
+            $update->timeestimated = $formdata->timeestimatedtext;
+        }
+        
 
 
         $returnid = $DB->insert_record('assign', $update);
@@ -5292,7 +5295,7 @@ class assign {
             $extensionduedate = $flags->extensionduedate;
         }
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->get_context());
-
+        
         $gradingstatus = $this->get_grading_status($user->id);
         $usergroups = $this->get_all_groups($user->id);
         $submissionstatus = new assign_submission_status($instance->allowsubmissionsfromdate,
