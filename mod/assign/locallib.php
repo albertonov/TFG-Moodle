@@ -7421,7 +7421,6 @@ class assign {
      */
     public function save_submission(stdClass $data, & $notices) {
         global $CFG, $USER, $DB;
-
         $userid = $USER->id;
         if (!empty($data->userid)) {
             $userid = $data->userid;
@@ -7448,6 +7447,13 @@ class assign {
             $notices[] = get_string('submissionempty', 'mod_assign');
             return false;
         }
+
+        $firstime = false;
+
+        if ($submission->status  == 'new') {
+            $firstime = true;
+        }
+
 
         // Check that no one has modified the submission since we started looking at it.
         if (isset($data->lastmodified) && ($submission->timemodified > $data->lastmodified)) {
@@ -7528,9 +7534,21 @@ class assign {
             $this->notify_graders($submission);
             \mod_assign\event\assessable_submitted::create_from_submission($this, $submission, true)->trigger();
         }
-        if($instance->isgamebased) {
-            $expGained = $instance->multiplicadorgb * 15;
-            core_user::user_add_experience_to_total_and_course($userid, $expGained,$instance->course );   
+
+        if($instance->isgamebased && $firstime) {
+            if ($instance->teamsubmission && !$instance->requireallteammemberssubmit) {
+                $team = $this->get_submission_group_members($submission->groupid, true);
+                
+                foreach ($team as $member) {
+                    $expGained = $instance->multiplicadorgb * 15;
+                    core_user::user_add_experience_to_total_and_course($member->id, $expGained,$instance->course ); 
+                }
+
+            } else {
+                $expGained = $instance->multiplicadorgb * 15;
+                core_user::user_add_experience_to_total_and_course($userid, $expGained,$instance->course ); 
+            }
+  
         }
      
         return true;
