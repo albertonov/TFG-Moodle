@@ -38,6 +38,7 @@
         <FIELD NAME="preventsubmissionnotingroup" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If enabled a user will be unable to make a submission unless they are a member of a group."/>
         <FIELD NAME="isgamebased" TYPE="int"  NOTNULL="true" LENGTH="2" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="multiplicadorgb" TYPE="float" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="timeestimated" TYPE="int"  LENGTH="10"   DEFAULT="0" NOTNULL="false"  SEQUENCE="false"/>
 
       </FIELDS>
       <KEYS>

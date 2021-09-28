@@ -627,6 +627,13 @@ $string['viewrevealidentitiesconfirm'] = 'View reveal student identities confirm
 $string['workflowfilter'] = 'Workflow filter';
 $string['xofy'] = '{$a->x} of {$a->y}';
 
+
+$string['gamificationheader'] = 'Gamificación y rendimiento';
+$string['gamificationenabled'] = 'Activar gamificación';
+$string['gamificationlevel'] = 'Grado de dificultad';
+$string['timeestimated'] = 'Añadir tiempo estimado';
+
+
 // Deprecated since Moodle 3.8.
 $string['duedateno'] = 'No due date';
 $string['mysubmission'] = 'My submission: ';
@@ -634,3 +641,5 @@ $string['nolatesubmissions'] = 'No late submissions accepted. ';
 $string['nosubmissionsacceptedafter'] = 'No submissions accepted after ';
 $string['notsubmittedyet'] = 'Not submitted yet';
 $string['submissionsnotgraded'] = 'Submissions not graded: {$a}';
+
+
