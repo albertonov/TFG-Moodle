@@ -7,14 +7,6 @@ require_once($CFG->dirroot . '/mod/assign/locallib.php');
 require_once($CFG->dirroot . '/mod/assign/tests/generator.php');
 
 
-/**
- * Provides the unit tests for feedback.
- *
- * @package     mod_assign
- * @category    test
- * @copyright   2019 Ilya Tregubov ilyatregubov@catalyst-au.net
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class mod_assign_gamification_testcase extends advanced_testcase {
 
     /**
@@ -519,6 +511,89 @@ class mod_assign_gamification_testcase extends advanced_testcase {
 
 
 
+    }
+
+
+
+        public function get_assign_submission_status_renderable($user, $showlinks) {
+        global $PAGE;
+
+        $instance = $this->get_instance();
+        $flags = $this->get_user_flags($user->id, false);
+        $submission = $this->get_user_submission($user->id, false);
+
+        $teamsubmission = null;
+        $submissiongroup = null;
+        $notsubmitted = array();
+        if ($instance->teamsubmission) {
+            $teamsubmission = $this->get_group_submission($user->id, 0, false);
+            $submissiongroup = $this->get_submission_group($user->id);
+            $groupid = 0;
+            if ($submissiongroup) {
+                $groupid = $submissiongroup->id;
+            }
+            $notsubmitted = $this->get_submission_group_members_who_have_not_submitted($groupid, false);
+        }
+
+        $showedit = $showlinks &&
+                    ($this->is_any_submission_plugin_enabled()) &&
+                    $this->can_edit_submission($user->id);
+
+        $submissionlocked = ($flags && $flags->locked);
+
+        // Grading criteria preview.
+        $gradingmanager = get_grading_manager($this->context, 'mod_assign', 'submissions');
+        $gradingcontrollerpreview = '';
+        if ($gradingmethod = $gradingmanager->get_active_method()) {
+            $controller = $gradingmanager->get_controller($gradingmethod);
+            if ($controller->is_form_defined()) {
+                $gradingcontrollerpreview = $controller->render_preview($PAGE);
+            }
+        }
+
+        $showsubmit = ($showlinks && $this->submissions_open($user->id));
+        $showsubmit = ($showsubmit && $this->show_submit_button($submission, $teamsubmission, $user->id));
+
+        $extensionduedate = null;
+        if ($flags) {
+            $extensionduedate = $flags->extensionduedate;
+        }
+        $viewfullnames = has_capability('moodle/site:viewfullnames', $this->get_context());
+        
+        $gradingstatus = $this->get_grading_status($user->id);
+        $usergroups = $this->get_all_groups($user->id);
+        $submissionstatus = new assign_submission_status($instance->allowsubmissionsfromdate,
+                                                          $instance->alwaysshowdescription,
+                                                          $submission,
+                                                          $instance->teamsubmission,
+                                                          $teamsubmission,
+                                                          $submissiongroup,
+                                                          $notsubmitted,
+                                                          $this->is_any_submission_plugin_enabled(),
+                                                          $submissionlocked,
+                                                          $this->is_graded($user->id),
+                                                          $instance->duedate,
+                                                          $instance->cutoffdate,
+                                                          $this->get_submission_plugins(),
+                                                          $this->get_return_action(),
+                                                          $this->get_return_params(),
+                                                          $this->get_course_module()->id,
+                                                          $this->get_course()->id,
+                                                          assign_submission_status::STUDENT_VIEW,
+                                                          $showedit,
+                                                          $showsubmit,
+                                                          $viewfullnames,
+                                                          $extensionduedate,
+                                                          $this->get_context(),
+                                                          $this->is_blind_marking(),
+                                                          $gradingcontrollerpreview,
+                                                          $instance->attemptreopenmethod,
+                                                          $instance->maxattempts,
+                                                          $gradingstatus,
+                                                          $instance->preventsubmissionnotingroup,
+                                                          $usergroups,
+                                                          $instance->timeestimated);
+        return $submissionstatus;
     }
 
 }
