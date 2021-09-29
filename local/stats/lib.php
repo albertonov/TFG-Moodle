@@ -164,7 +164,7 @@ function get_user_attendance($userid, $fromtime){
 
     $attendacerecords = $DB->get_records_sql(
         "   SELECT timecreated 
-            FROM mdl_logstore_standard_log l
+            FROM {logstore_standard_log} l
             WHERE userid = ? and action = 'loggedin' and timecreated  > (?)",
         array($userid, $today - $fromtime)
     );
@@ -188,12 +188,40 @@ function get_mean_time_assigns($userid){
     global $DB;
     $timemean = $DB->get_field_sql(
         "   SELECT avg(a.duedate  - s.timemodified) 
-            FROM mdl_assign_submission s
-            INNER JOIN mdl_assign a
+            FROM {assign_submission} s
+            INNER JOIN {assign} a
             ON a.id = s.assignment 
             WHERE userid = ? and status = 'submitted'",
         array($userid)
     );
     return seconds_to_days($timemean);
+
+}
+
+
+function get_qualifications_from_posts($userid){
+    global $DB;
+    $qualification = $DB->get_records_sql(
+        "   SELECT p.qual, count(p.qual) as totalcount,   
+            count(p.qual)/(select count(*) from mdl_post_qualifications sp where id_user =  ?)::float as percentage
+        
+            FROM mdl_post_qualifications p
+            WHERE id_user = ?
+            GROUP BY qual
+        
+        ",
+        array($userid,$userid )
+    );
+
+    return array(
+        "percentage_positive" => $qualification["positive"]->percentage * 100,
+        "percentage_negative" => $qualification["negative"]->percentage * 100,
+        "percentage_like" => $qualification["like"]->percentage * 100,
+
+        "total_positive" => $qualification["positive"]->totalcount,
+        "total_negative" => $qualification["negative"]->totalcount,
+        "total_like" => $qualification["like"]->totalcount,
+
+    );
 
 }
