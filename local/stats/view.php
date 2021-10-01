@@ -11,7 +11,6 @@ require_login(0, true, null, false);
 
 
 echo $OUTPUT->header();
-$serie2 = new core\chart_series('My series 222', [333, 888, 1333, 600]);
 
 
 $recordsUE = get_user_experience_from_courses($USER->id);
@@ -29,5 +28,7 @@ $data->chart2 = $OUTPUT->render($attendacechart);
 $data->qualified_task = get_last_five_grades_qualificated($USER->id);
 $data->mean = get_mean_time_assigns($USER->id);
 
+
+$data->qualificated_post = get_qualifications_from_posts($USER->id);
 echo $OUTPUT->render_from_template('local_stats/stats',$data );
 echo $OUTPUT->footer();
