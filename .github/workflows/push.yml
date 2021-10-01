@@ -1,28 +1,26 @@
+name: Core
 
+on: [push]
 
-on: [push, pull_request]
+env:
+  php: 7.4
 
 jobs:
 
 
-    
+  PHPUnit:
+    runs-on: ${{ matrix.os }}
     services:
-      #servicio base de datos para la ejecucion de pruebas
-      postgres:
-        image: postgres:10
-        
-        env:
-          #usuario de la base de datos
-          POSTGRES_USER: 'postgres'
-          POSTGRES_HOST_AUTH_METHOD: 'trust'
+      exttests:
+        image: moodlehq/moodle-exttests
         ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
-
+          - 8080:80
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
     strategy:
       fail-fast: false
-      #contruccion de la matriz
-      #para cada opcion de cada linea, se combina con una opcion del resto de filas.
       matrix:
         include:
           - os: ubuntu-18.04
@@ -31,26 +29,27 @@ jobs:
 
     steps:
 
-      #instalacion de la version de PHP correspondiente
-      - name: Setup PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ matrix.extensions }}
-          ini-values: max_input_vars=5000
-          coverage: none
-      
-      #instalacion de PostgresSQL
- 
-      - if: ${{ matrix.db == 'pgsql' }}
+      - name: Setting up DB pgsql
+        if: ${{ matrix.db == 'pgsql' }}
         uses: m4nu56/postgresql-action@v1
         with:
           postgresql version: 9.6
-          postgresql db: testdb
+          postgresql db: test
           postgresql user: test
           postgresql password: test
 
-      #instalacion de PhpUnit
+      - name: Configuring git vars
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Setting up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
+        uses: actions/checkout@v2
+
       - name: Setting up PHPUnit
         env:
           dbtype: ${{ matrix.db }}
@@ -60,17 +59,7 @@ jobs:
           mkdir ../moodledata
           sudo locale-gen en_AU.UTF-8
           php admin/tool/phpunit/cli/init.php --no-composer-self-update
-      
-      
-      #uso del script de la base de datos 
-      - name: Setting up PHPUnit
-        env:
-          dbtype: ${{ matrix.db }}
-        run:  psql -U postgres -d testdb -a -f scriptSQLTravis.sql;
 
-
-
-      #ejecucion de pruebas unitarias
       - name: Running PHPUnit tests
         env:
           dbtype: ${{ matrix.db }}
