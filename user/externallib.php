@@ -2007,4 +2007,14 @@ class core_user_external extends external_api {
             )
         );
     }
+
+
+
+
+
+
+
 }
+
+
+

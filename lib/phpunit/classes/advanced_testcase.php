@@ -113,6 +113,8 @@ abstract class advanced_testcase extends base_testcase {
             }
             self::resetAllData(null);
 
+
+
         } else if ($this->resetAfterTest === false) {
             if ($this->testdbtransaction) {
                 $this->testdbtransaction->allow_commit();

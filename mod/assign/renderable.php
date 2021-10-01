@@ -460,7 +460,9 @@ class assign_submission_status implements renderable {
                                 $maxattempts,
                                 $gradingstatus,
                                 $preventsubmissionnotingroup,
-                                $usergroups) {
+                                $usergroups, 
+                                $timeestimated 
+                                ) {
         $this->allowsubmissionsfromdate = $allowsubmissionsfromdate;
         $this->alwaysshowdescription = $alwaysshowdescription;
         $this->submission = $submission;
@@ -491,6 +493,8 @@ class assign_submission_status implements renderable {
         $this->gradingstatus = $gradingstatus;
         $this->preventsubmissionnotingroup = $preventsubmissionnotingroup;
         $this->usergroups = $usergroups;
+        $this->timeestimated = $timeestimated;
+
     }
 }
 /**
@@ -797,7 +801,8 @@ class assign_grading_summary implements renderable {
                                 $courserelativedatesmode,
                                 $coursestartdate,
                                 $cangrade = true,
-                                $isvisible = true) {
+                                $isvisible = true,
+                                $timeestimated) {
         $this->participantcount = $participantcount;
         $this->submissiondraftsenabled = $submissiondraftsenabled;
         $this->submissiondraftscount = $submissiondraftscount;
@@ -813,6 +818,8 @@ class assign_grading_summary implements renderable {
         $this->coursestartdate = $coursestartdate;
         $this->cangrade = $cangrade;
         $this->isvisible = $isvisible;
+        $this->timeestimated = $timeestimated;
+
     }
 }
 

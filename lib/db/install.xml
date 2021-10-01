@@ -271,6 +271,8 @@
         <FIELD NAME="modifierid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="courseexperience" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -875,6 +877,8 @@
         <FIELD NAME="middlename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Middle name"/>
         <FIELD NAME="alternatename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Alternate name - Useful for three-name countries."/>
         <FIELD NAME="moodlenetprofile" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Moodle.net profile information"/>
+        <FIELD NAME="totalexperience" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="levelexperience" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

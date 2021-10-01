@@ -142,6 +142,12 @@ class provider implements
             'grade' => 'privacy:metadata:forum_grades:grade',
         ], 'privacy:metadata:forum_grades');
 
+
+        // The 'forum_grades' table stores grade data.
+        $items->add_database_table('post_qualifications', [
+            'id_user' => 'privacy:metadata:post_qualifications:id_user'
+        ], 'privacy:metadata:post_qualifications');
+
         // Forum posts can be tagged and rated.
         $items->link_subsystem('core_tag', 'privacy:metadata:core_tag');
         $items->link_subsystem('core_rating', 'privacy:metadata:core_rating');

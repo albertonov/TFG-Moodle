@@ -36,6 +36,7 @@ use context;
 use core_tag_tag;
 use renderer_base;
 use stdClass;
+use user;
 
 require_once($CFG->dirroot . '/mod/forum/lib.php');
 
@@ -115,6 +116,38 @@ class post extends exporter {
             'isdeleted' => ['type' => PARAM_BOOL],
             'isprivatereply' => ['type' => PARAM_BOOL],
             'haswordcount' => ['type' => PARAM_BOOL],
+            'hasnegativequal' => ['type' => PARAM_BOOL],
+            'haspositivequal' => ['type' => PARAM_BOOL],
+            'haslikequal' => ['type' => PARAM_BOOL],
+            'hasemptyqual' => ['type' => PARAM_BOOL],
+            'numberqual' => ['type' => PARAM_INT],
+            'user1' => ['type' => 
+            [
+                'id' => ['type' => PARAM_INT, 'null' => NULL_ALLOWED], 
+                'name' => ['type' => PARAM_TEXT, 'null' => NULL_ALLOWED],
+                'show' => ['type' => PARAM_BOOL, 'null' => NULL_ALLOWED]
+                ]
+            ],
+            'user2' => ['type' => 
+            [
+                'id' => ['type' => PARAM_INT, 'null' => NULL_ALLOWED], 
+                'name' => ['type' => PARAM_TEXT, 'null' => NULL_ALLOWED],
+                'show' => ['type' => PARAM_BOOL, 'null' => NULL_ALLOWED]
+                ]
+            ],
+            'restofuser' => ['type' => 
+            [
+                'lista' => ['type' => PARAM_TEXT, 'null' => NULL_ALLOWED],
+                'numero' => ['type' => PARAM_INT, 'null' => NULL_ALLOWED],
+
+                'show' => ['type' => PARAM_BOOL, 'null' => NULL_ALLOWED]
+                ]
+            ],
+
+            'course' => ['type' => PARAM_INT],
+
+
+            
             'wordcount' => [
                 'type' => PARAM_INT,
                 'optional' => true,
@@ -211,6 +244,13 @@ class post extends exporter {
                     ],
                     'delete' => [
                         'description' => 'The URL used to delete the post',
+                        'type' => PARAM_URL,
+                        'optional' => true,
+                        'default' => null,
+                        'null' => NULL_ALLOWED
+                    ],
+                    'calificate' => [
+                        'description' => 'The URL used to calificate the post',
                         'type' => PARAM_URL,
                         'optional' => true,
                         'default' => null,
@@ -389,6 +429,42 @@ class post extends exporter {
         $markasunreadurl = $cancontrolreadstatus ? $urlfactory->get_mark_post_as_unread_url_from_post($post) : null;
         $discussurl = $canview ? $urlfactory->get_discussion_view_url_from_post($post) : null;
 
+        $calificatenegativeurl = $urlfactory->get_calificate_url_from_post($post, 'negative');
+        $calificatepositiveurl = $urlfactory->get_calificate_url_from_post($post, 'positive');
+        $calificatelikeurl = $urlfactory->get_calificate_url_from_post($post, 'like');
+
+
+
+        #user has emited qual
+        $hasqual = $forum->has_qualification_emited($post->get_id(), $user->id);
+        
+        $user1 = null;
+        $user2 = null;
+        $restofuserstring = null;
+        $numberofqual = $forum->get_qualification_number($post->get_id());
+        if ($numberofqual > 0){
+            $idlistqual = $forum->get_qualification_users($post->get_id(),$user->id);
+            $user1 = \core_user::get_user($idlistqual[0]);
+            if ($numberofqual > 1){
+                $user2 = \core_user::get_user($idlistqual[1]);
+                unset($idlistqual[0]);
+                unset($idlistqual[1]);
+                $idlistqual = array_values($idlistqual);
+                $restofuser = [];
+
+                foreach ($idlistqual as &$idus) {
+                    array_push($restofuser, \core_user::get_user($idlistqual[0])->firstname);
+                    $restofuserstring = implode(",", $restofuser);
+                }
+            }
+
+        }
+
+            
+
+        #print_error($forum->get_qualification_users($post->get_id())[2]);
+
+
         $authorexporter = new author_exporter(
             $author,
             $authorcontextid,
@@ -443,6 +519,28 @@ class post extends exporter {
             'haswordcount' => $showwordcount,
             'wordcount' => $wordcount,
             'charcount' => $charcount,
+            'hasnegativequal' => $hasqual === "negative" ? true : false,
+            'haspositivequal' => $hasqual === "positive" ? true : false,
+            'haslikequal' => $hasqual === "like" ? true : false,
+            'hasemptyqual' => $hasqual === "empty" ? true : false,
+            'numberqual' => $numberofqual,
+            'user1' => [
+                'id' => is_null( $user1) ? null :  $user1->id,
+                'name' => is_null( $user1) ? null : $user1->firstname,
+                'show'=> is_null( $user1) ? false : true
+            ],
+            'user2' => [
+                'id' => is_null( $user2) ? null : $user2->id,
+                'name' => is_null( $user2) ? null : $user2->firstname,
+                'show'=> is_null( $user2)? false : true
+            ],
+            'course' => $forum->get_course_id(),
+            'restofuser' => [
+                'lista' =>  is_null( $restofuserstring)? null :$restofuserstring,
+                'numero' => is_null( $restofuserstring)? null :count($restofuser),
+                'show'=> is_null( $restofuserstring)? false : true
+            ],
+
             'capabilities' => [
                 'view' => $canview,
                 'edit' => $canedit,
@@ -460,6 +558,17 @@ class post extends exporter {
                 'viewparent' => $viewparenturl ? $viewparenturl->out(false) : null,
                 'edit' => $editurl ? $editurl->out(false) : null,
                 'delete' => $deleteurl ? $deleteurl->out(false) : null,
+                /*
+                'calificate' => [
+                    'like' => $calificatelikeurl,
+                    'positive' => $calificatepositiveurl,
+                    'negative' => $calificatenegativeurl 
+                ],
+                */
+                'calificatelike' => $calificatelikeurl,
+                'calificatenegative' => $calificatenegativeurl,
+                'calificatepositive' => $calificatepositiveurl,
+
                 'split' => $spliturl ? $spliturl->out(false) : null,
                 'reply' => $replyurl ? $replyurl->out(false) : null,
                 'export' => $exporturl && $exporturl ? $exporturl->out(false) : null,

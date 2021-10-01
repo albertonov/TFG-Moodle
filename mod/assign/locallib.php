@@ -740,6 +740,31 @@ class assign {
         if (empty($update->markingworkflow)) { // If marking workflow is disabled, make sure allocation is disabled.
             $update->markingallocation = 0;
         }
+        if (isset($formdata->GamificationEnabled))  {
+            $update->isgamebased = $formdata->GamificationEnabled ;
+
+            if (isset($formdata->multiplicador)) {
+                switch ($formdata->multiplicador) {
+                    case 0:
+                        $update->multiplicadorgb = 0.75;
+                        break;
+                    case 1:
+                        $update->multiplicadorgb = 1.00;
+                        break;
+                    case 2:
+                        $update->multiplicadorgb = 1.25;
+                        break;
+                    case 3:
+                        $update->multiplicadorgb = 1.75;
+                        break;
+                }
+            }
+        } 
+        if (isset($formdata->timeestimatedtext)) {
+            $update->timeestimated = $formdata->timeestimatedtext;
+        }
+        
+
 
         $returnid = $DB->insert_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$returnid), '*', MUST_EXIST);
@@ -1484,6 +1509,26 @@ class assign {
         if (empty($update->markingworkflow)) { // If marking workflow is disabled, make sure allocation is disabled.
             $update->markingallocation = 0;
         }
+        if (isset($formdata->GamificationEnabled))  {
+            $update->isgamebased = $formdata->GamificationEnabled ;
+
+            if (isset($formdata->multiplicador)) {
+                switch ($formdata->multiplicador) {
+                    case 0:
+                        $update->multiplicadorgb = 0.75;
+                        break;
+                    case 1:
+                        $update->multiplicadorgb = 1.00;
+                        break;
+                    case 2:
+                        $update->multiplicadorgb = 1.25;
+                        break;
+                    case 3:
+                        $update->multiplicadorgb = 1.75;
+                        break;
+                }
+            }
+        } 
 
         $result = $DB->update_record('assign', $update);
         $this->instance = $DB->get_record('assign', array('id'=>$update->id), '*', MUST_EXIST);
@@ -2535,6 +2580,7 @@ class assign {
      */
     public static function cron() {
         global $DB;
+
 
         // Only ever send a max of one days worth of updates.
         $yesterday = time() - (24 * 3600);
@@ -4022,7 +4068,9 @@ class assign {
                                                                      $instance->maxattempts,
                                                                      $this->get_grading_status($userid),
                                                                      $instance->preventsubmissionnotingroup,
-                                                                     $usergroups);
+                                                                     $usergroups,
+                                                                     $instance->timeestimated
+                                                                    );
             $o .= $this->get_renderer()->render($submissionstatus);
         }
 
@@ -4216,7 +4264,8 @@ class assign {
                                                              $instance->maxattempts,
                                                              $this->get_grading_status($userid),
                                                              $instance->preventsubmissionnotingroup,
-                                                             $usergroups);
+                                                             $usergroups,
+                                                             $instance->timeestimated);
             $o .= $this->get_renderer()->render($submissionstatus);
         }
 
@@ -5246,7 +5295,7 @@ class assign {
             $extensionduedate = $flags->extensionduedate;
         }
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->get_context());
-
+        
         $gradingstatus = $this->get_grading_status($user->id);
         $usergroups = $this->get_all_groups($user->id);
         $submissionstatus = new assign_submission_status($instance->allowsubmissionsfromdate,
@@ -5278,7 +5327,8 @@ class assign {
                                                           $instance->maxattempts,
                                                           $gradingstatus,
                                                           $instance->preventsubmissionnotingroup,
-                                                          $usergroups);
+                                                          $usergroups,
+                                                          $instance->timeestimated);
         return $submissionstatus;
     }
 
@@ -5657,7 +5707,8 @@ class assign {
                 $course->relativedatesmode,
                 $course->startdate,
                 $this->can_grade(),
-                $isvisible
+                $isvisible,
+                $instance->timeestimated
             );
         } else {
             // The active group has already been updated in groups_print_activity_menu().
@@ -5677,7 +5728,8 @@ class assign {
                 $course->relativedatesmode,
                 $course->startdate,
                 $this->can_grade(),
-                $isvisible
+                $isvisible,
+                $instance->timeestimated
             );
         }
 
@@ -7367,6 +7419,10 @@ class assign {
         return true;
     }
 
+
+
+
+    
     /**
      * Save assignment submission for the current user.
      *
@@ -7377,12 +7433,11 @@ class assign {
      */
     public function save_submission(stdClass $data, & $notices) {
         global $CFG, $USER, $DB;
-
         $userid = $USER->id;
         if (!empty($data->userid)) {
             $userid = $data->userid;
         }
-
+        
         $user = clone($USER);
         if ($userid == $USER->id) {
             require_capability('mod/assign:submit', $this->context);
@@ -7404,6 +7459,13 @@ class assign {
             $notices[] = get_string('submissionempty', 'mod_assign');
             return false;
         }
+
+        $firstime = false;
+
+        if ($submission->status  == 'new') {
+            $firstime = true;
+        }
+
 
         // Check that no one has modified the submission since we started looking at it.
         if (isset($data->lastmodified) && ($submission->timemodified > $data->lastmodified)) {
@@ -7484,6 +7546,23 @@ class assign {
             $this->notify_graders($submission);
             \mod_assign\event\assessable_submitted::create_from_submission($this, $submission, true)->trigger();
         }
+
+        if($instance->isgamebased && $firstime) {
+            if ($instance->teamsubmission && !$instance->requireallteammemberssubmit) {
+                $team = $this->get_submission_group_members($submission->groupid, true);
+                
+                foreach ($team as $member) {
+                    $expGained = $instance->multiplicadorgb * 15;
+                    core_user::user_add_experience_to_total_and_course($member->id, $expGained,$instance->course ); 
+                }
+
+            } else {
+                $expGained = $instance->multiplicadorgb * 15;
+                core_user::user_add_experience_to_total_and_course($userid, $expGained,$instance->course ); 
+            }
+  
+        }
+     
         return true;
     }
 
@@ -7509,7 +7588,7 @@ class assign {
             return false;
         }
         $instance = $this->get_instance();
-
+        
         $data = new stdClass();
         $data->userid = $userid;
         $mform = new mod_assign_submission_form(null, array($this, $data));

@@ -49,6 +49,9 @@ class mod_assign_generator extends testing_module_generator {
             'maxattempts'                       => -1,
             'markingworkflow'                   => 0,
             'markingallocation'                 => 0,
+            'isgamebased'                       => 1,
+            'multiplicadorgb'                   => 1.00
+
         );
 
         foreach ($defaultsettings as $name => $value) {
