@@ -277,7 +277,6 @@ class mod_assign_renderer extends plugin_renderer_base {
      */
     public function render_assign_grading_summary(assign_grading_summary $summary) {
         // Create a table for the data. AQUI lo que ve el profesor
-
         $o = '';
         $o .= $this->output->container_start('gradingsummary');
         $o .= $this->output->heading(get_string('gradingsummary', 'assign'), 3);
@@ -358,6 +357,12 @@ class mod_assign_renderer extends plugin_renderer_base {
             }
 
             $this->add_table_row_tuple($t, $cell1content, $cell2content);
+            if ($summary->timeestimated > 0) {     
+                $this->add_table_row_tuple($t, 'Tiempo estimado', $summary->timeestimated);
+            }
+            else{
+                $this->add_table_row_tuple($t, 'Tiempo estimado', 'N/A');
+            }
             if ($duedate < $time) {
                 $cell1content = get_string('latesubmissions', 'assign');
                 $cutoffdate = $summary->cutoffdate;
@@ -372,12 +377,6 @@ class mod_assign_renderer extends plugin_renderer_base {
                 }
             }
 
-        }
-        if ($summary->timeestimated > 0) {     
-            $this->add_table_row_tuple($t, 'Tiempo estimado', $summary->timeestimated.' horas');
-        }
-        else{
-            $this->add_table_row_tuple($t, 'Tiempo estimado', 'N/A');
         }
 
         // All done - write the table.
