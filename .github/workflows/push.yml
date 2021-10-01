@@ -2,13 +2,8 @@
 
 on: [push, pull_request]
 
-
 jobs:
-  #test deploy 
-  test:
 
-    #indicamos el tipo de OS de la MV
-    runs-on: ubuntu-18.04
 
     
     services:
@@ -29,14 +24,12 @@ jobs:
       #contruccion de la matriz
       #para cada opcion de cada linea, se combina con una opcion del resto de filas.
       matrix:
-        php: ['7.3']
-        database: [pgsql]
+        include:
+          - os: ubuntu-18.04
+            php: 7.4
+            db: pgsql
 
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-        with:
-          path: plugin
 
       #instalacion de la version de PHP correspondiente
       - name: Setup PHP ${{ matrix.php }}
