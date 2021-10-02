@@ -82,13 +82,35 @@ define('QUIZ_EVENT_TYPE_CLOSE', 'close');
 function quiz_add_instance($quiz) {
     global $DB;
     $cmid = $quiz->coursemodule;
-
     // Process the options from the form.
     $quiz->timecreated = time();
     $result = quiz_process_options($quiz);
     if ($result && is_string($result)) {
         return $result;
     }
+    $quiz->isgamebased = 0 ;
+    $quiz->multiplicadorgb = 1 ; 
+
+    if (isset($quiz->GamificationEnabled))  {
+        $quiz->isgamebased = $quiz->GamificationEnabled ;
+
+        if (isset($quiz->multiplicador)) {
+            switch ($quiz->multiplicador) {
+                case 0:
+                    $quiz->multiplicadorgb = 0.75;
+                    break;
+                case 1:
+                    $quiz->multiplicadorgb = 1.00;
+                    break;
+                case 2:
+                    $quiz->multiplicadorgb = 1.25;
+                    break;
+                case 3:
+                    $quiz->multiplicadorgb = 1.75;
+                    break;
+            }
+        }
+    } 
 
     // Try to store it in the database.
     $quiz->id = $DB->insert_record('quiz', $quiz);
@@ -128,6 +150,31 @@ function quiz_update_instance($quiz, $mform) {
     // in some of the function calls below.
     $quiz->sumgrades = $oldquiz->sumgrades;
     $quiz->grade     = $oldquiz->grade;
+
+
+    $quiz->isgamebased = 0 ;
+    $quiz->multiplicadorgb = 1 ; 
+    
+    if (isset($quiz->GamificationEnabled))  {
+        $quiz->isgamebased = $quiz->GamificationEnabled ;
+
+        if (isset($quiz->multiplicador)) {
+            switch ($quiz->multiplicador) {
+                case 0:
+                    $quiz->multiplicadorgb = 0.75;
+                    break;
+                case 1:
+                    $quiz->multiplicadorgb = 1.00;
+                    break;
+                case 2:
+                    $quiz->multiplicadorgb = 1.25;
+                    break;
+                case 3:
+                    $quiz->multiplicadorgb = 1.75;
+                    break;
+            }
+        }
+    } 
 
     // Update the database.
     $quiz->id = $quiz->instance;

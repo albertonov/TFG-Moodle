@@ -2174,8 +2174,7 @@ class quiz_attempt {
      *      (otherwise use $timestamp as the finish time as well).
      */
     public function process_finish($timestamp, $processsubmitted, $timefinish = null) {
-        global $DB;
-
+        global $DB, $USER;
         $transaction = $DB->start_delegated_transaction();
 
         if ($processsubmitted) {
@@ -2191,7 +2190,12 @@ class quiz_attempt {
         $this->attempt->state = self::FINISHED;
         $this->attempt->timecheckstate = null;
         $DB->update_record('quiz_attempts', $this->attempt);
-
+        if ( $this->get_quiz()->isgamebased && $this->get_attempt()->attempt <2 ) { 
+            $userid = $USER->id;
+            $expGained = $this->get_quiz()->multiplicadorgb * 10;
+            core_user::user_add_experience_to_total_and_course($userid, $expGained, $this->get_courseid()); 
+        }
+       
         if (!$this->is_preview()) {
             quiz_save_best_grade($this->get_quiz(), $this->attempt->userid);
 
