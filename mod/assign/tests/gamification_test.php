@@ -441,14 +441,14 @@ class mod_assign_gamification_testcase extends advanced_testcase {
         $courseexperience3 = $DB->get_field_sql('SELECT courseexperience FROM {user_enrolments}  where userid = '.$user3->id.' and enrolid in ( SELECT id from {enrol} where courseid = '.$course->id.')');
                
         
+        $expectedExperience = 19;#round 15 * 1.00 * 1.25 
+        $this->assertEquals( $userexperience1,  $expectedExperience );
+        $this->assertEquals( $courseexperience1,  $expectedExperience );
 
-        $this->assertEquals( $userexperience1, 15);
-        $this->assertEquals( $courseexperience1, 15);
-
-        $this->assertEquals( $userexperience2, 15);
-        $this->assertEquals( $courseexperience2, 15);
-        $this->assertEquals( $userexperience3, 15);
-        $this->assertEquals( $courseexperience3, 15);
+        $this->assertEquals( $userexperience2,  $expectedExperience );
+        $this->assertEquals( $courseexperience2,  $expectedExperience );
+        $this->assertEquals( $userexperience3,  $expectedExperience );
+        $this->assertEquals( $courseexperience3,  $expectedExperience );
     }
     
     public function test_try_multiple_save_submission_assign() {

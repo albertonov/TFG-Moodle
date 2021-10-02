@@ -7552,7 +7552,7 @@ class assign {
                 $team = $this->get_submission_group_members($submission->groupid, true);
                 
                 foreach ($team as $member) {
-                    $expGained = $instance->multiplicadorgb * 15;
+                    $expGained = $instance->multiplicadorgb * 15 * 1.25;
                     core_user::user_add_experience_to_total_and_course($member->id, $expGained,$instance->course ); 
                 }
 
