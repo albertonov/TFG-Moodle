@@ -1372,6 +1372,9 @@ class mod_forum_external extends external_api {
                 $settings->discussionsubscribe = $options['discussionsubscribe'];
                 forum_post_subscription($settings, $forumrecord, $discussionrecord);
             }
+            #print_r($USER->id, 5,$course->id );   
+            \core_user::user_add_experience_to_total_and_course($USER->id, 50,$course->id );   
+    
         } else {
             throw new moodle_exception('couldnotadd', 'forum');
         }

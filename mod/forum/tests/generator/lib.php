@@ -320,6 +320,11 @@ class mod_forum_generator extends testing_module_generator {
 
         // Add the post.
         $record->id = $DB->insert_record('forum_posts', $record);
+        #simulate add experience
+        if (isset($record->courseid)) {
+            core_user::user_add_experience_to_total_and_course($record->userid, 5,$record->courseid);
+        }
+        
 
         if (property_exists($record, 'tags')) {
             $discussion = $DB->get_record('forum_discussions', ['id' => $record->discussion]);
