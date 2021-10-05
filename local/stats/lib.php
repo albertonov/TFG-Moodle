@@ -22,36 +22,32 @@ function get_user_experience_from_courses($userid)
 
 function create_experience_chart($records)
 {
-
+        
     $arrayseries = array();
     $arraylabels = array();
+
     foreach ($records as &$record) {
         array_push($arrayseries, $record->courseexperience);
         array_push($arraylabels, $record->fullname);
     }
 
-    $serie = new core\chart_series('Experiencia', $arrayseries);
-
-
-    $factory = new factory;
-    return $factory-> create_doughnut_chart(array($serie), array($arraylabels));
+    $factory = new piechart_factory($arrayseries, $arraylabels, 'Experiencia');
+    return  $factory->create_chart('doughnut');
 }
 
 function create_attendance_chart($records)
 {
+
     $arraylabels = array();
     $arrayseries = array();
-
 
     foreach($records as $key => $record) {
         array_push($arraylabels,  date('D', strtotime($key)));
         array_push($arrayseries, $records[$key]);
-
     }
 
-    $serie = new core\chart_series('Conexiones', $arrayseries);
-    $factory = new factory;
-    return $factory-> create_line_chart(array($serie), array($arraylabels));
+    $factory = new linechart_factory($arrayseries, $arraylabels, 'Conexiones');
+    return  $factory->create_chart('line');
 }
 
 
@@ -61,24 +57,6 @@ function get_last_five_grades_qualificated($userid)
     #recibir id y obtener los ultimos 5 quizs o tareas calificadas
     global $DB;
 
-    /*
-    $recordsassigns = $DB->get_records_sql("SELECT ag.timemodified as timemodified, ag.grade, ag.assignment, ag.attemptnumber, 'assign' as tipo, a.course, a.name
-    FROM {assign_grades} ag 
-    INNER JOIN {assign} a
-    ON a.id = ag.assignment
-    WHERE ag.userid = ?
-    ORDER BY ag.timemodified DESC limit 5"
-    , array($userid));
-
-
-    $recordsquizs = $DB->get_records_sql("SELECT qg.timemodified as timemodified, qg.grade, qg.quiz, 'quiz' as tipo, q.course, q.name
-    FROM {quiz_grades} qg
-    INNER JOIN {quiz} q
-    ON q.id = qg.quiz
-    WHERE qg.userid = ?
-    ORDER BY qg.timemodified DESC limit 5"
-    , array($userid));
-*/
 
     $recordsassigns = $DB->get_records_sql(
         "    SELECT ag.timemodified as timemodified, ag.grade, ag.assignment, ag.attemptnumber, 'assign' as tipo, a.course, a.name, asub.media
