@@ -37,7 +37,6 @@ function create_experience_chart($records)
 
 function create_attendance_chart($records)
 {
-  print_r($records);
     $end=date_create(array_key_last( $records));
     $begin =$end->sub(new DateInterval('P6D'));
     $end=date_create(array_key_last( $records));
