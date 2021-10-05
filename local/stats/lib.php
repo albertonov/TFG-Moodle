@@ -47,7 +47,8 @@ function create_attendance_chart($records)
     }
 
     $factory = new linechart_factory($arrayseries, $arraylabels, 'Conexiones');
-    return  $factory->create_chart('line');
+
+    return  $factory->create_chart('smooth');
 }
 
 
@@ -115,7 +116,13 @@ function get_last_five_grades_qualificated($userid)
                 'SELECT id FROM {course_modules} WHERE module = 17 AND course = ? AND instance = ?',
                 array($record->course, $record->quiz)
             );
+            $lastattemptid =    $DB->get_field_sql(
+                'SELECT id FROM {quiz_attempts} WHERE quiz = ? AND userid = ? ORDER BY attempt DESC limit 1',
+                array($record->quiz,$userid)
+            );
             $record->url = '../../../moodle/mod/quiz/view.php?id=' . $idurl;
+            $record->urlreview = '../../../moodle/mod/quiz/review.php?attempt='.$lastattemptid.'&cmid='.$idurl;
+
             $record->isquiz = true;
         } else {
             $idurl =    $DB->get_field_sql(
@@ -151,6 +158,8 @@ function get_user_attendance($userid, $fromtime){
         array_push($dates, date('m/d/Y', $record->timecreated));
     }
     return  array_count_values($dates);
+
+    
 }
 
 
