@@ -37,14 +37,26 @@ function create_experience_chart($records)
 
 function create_attendance_chart($records)
 {
+  print_r($records);
+    $end=date_create(array_key_last( $records));
+    $begin =$end->sub(new DateInterval('P6D'));
+    $end=date_create(array_key_last( $records));
+
+    $interval = new DateInterval('P1D');
+    $period=new DatePeriod($begin,$interval,$end);
 
     $arraylabels = array();
     $arrayseries = array();
 
-    foreach($records as $key => $record) {
-        array_push($arraylabels,  date('D', strtotime($key)));
-        array_push($arrayseries, $records[$key]);
+    foreach ($period as $day){
+      $usercount= isset($records[$day->format('m/d/Y')]) ? $records[$day->format('m/d/Y')] :0;
+      array_push($arraylabels, $day->format('D'));
+      array_push($arrayseries,$usercount);
     }
+    $key=array_key_last( $records);
+    array_push($arraylabels,  date('D', strtotime($key)));
+    array_push($arrayseries, $records[$key]);
+    
 
     $factory = new linechart_factory($arrayseries, $arraylabels, 'Conexiones');
 
