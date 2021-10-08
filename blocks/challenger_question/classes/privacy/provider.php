@@ -43,4 +43,15 @@ class provider implements \core_privacy\local\metadata\null_provider {
     public static function get_reason() : string {
         return 'privacy:metadata';
     }
+    public static function get_metadata(collection $items) : collection {
+    
+        $items->add_database_table('post_qualifications', [
+            'id_user' => 'privacy:metadata:post_qualifications:id_user'
+        ], 'privacy:metadata:post_qualifications');
+        return $items;
+
+    }
+
+    
+    
 }
