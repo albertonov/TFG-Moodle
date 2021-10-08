@@ -45,9 +45,12 @@ class provider implements \core_privacy\local\metadata\null_provider {
     }
     public static function get_metadata(collection $items) : collection {
     
-        $items->add_database_table('post_qualifications', [
-            'id_user' => 'privacy:metadata:post_qualifications:id_user'
-        ], 'privacy:metadata:post_qualifications');
+        $items->add_database_table('challenger_user_questions', [
+            'userid' => 'privacy:metadata:challenger_user_questions:userid'
+        ], 'privacy:metadata:challenger_user_questions');
+        $items->add_database_table('challenger_question', [
+            'id' => 'privacy:metadata:challenger_question:id'
+        ], 'privacy:metadata:challenger_question');
         return $items;
 
     }
