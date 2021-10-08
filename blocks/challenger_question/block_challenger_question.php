@@ -39,46 +39,44 @@ class block_challenger_question extends block_base {
      * @var int stores the time since when we want to show recent activity
      */
     protected $timestart = null;
-    protected $hascategory = false;
+    protected $hascategory = true;
 
     /**
      * Initialises the block
      */
     function init() {
         $this->title = 'Reto del dia';
-        $this-> set_first_question();  
     }
     function set_first_question() {
         
         global $DB, $COURSE;
-        print_r('no existe primera tarea');
-
-        $exists = $DB->record_exists_sql('SELECT id FROM {challenger_question} WHERE course ='.$COURSE->id);
-       if(!$exists) {
-            print_r('no existe primera tarea');
-
-            $context = context_course::instance($COURSE->id);
-
-            $existscategory = $DB->record_exists_sql("SELECT * FROM {question_categories} WHERE contextid =".$context->id."and name = 'CHALLENGER'");
-            if($existscategory) {
-                print_r(' existe la categoria');
-                $this->hascategory =true;
-                $category = $DB->get_field_sql("SELECT id FROM {question_categories} WHERE contextid =".$context->id."and name = 'CHALLENGER'");
-                $bank = $DB->get_records_sql("SELECT id FROM {question} WHERE qtype='truefalse' and category =".$category);
-                #print_r($bank);
-                $idarray = array_rand( $bank, $num = 1);
-                $challenger_question = new \stdClass();
-                $challenger_question->course = $COURSE->id;
-                $challenger_question->idquestion = $bank[$idarray]->id;
-
-                $DB->insert_record('challenger_question', $challenger_question);
+            $exists = $DB->record_exists_sql('SELECT id FROM {challenger_question} WHERE course ='.$COURSE->id);
+            if(!$exists) {
+                #print_r('no existe primera tarea');
+    
+                $context = context_course::instance($COURSE->id);
+    
+                $existscategory = $DB->record_exists_sql("SELECT * FROM {question_categories} WHERE contextid =".$context->id."and name = 'CHALLENGER'");
+                if($existscategory) {
+                    #print_r(' existe la categoria');
+                    $this->hascategory =true;
+                    $category = $DB->get_field_sql("SELECT id FROM {question_categories} WHERE contextid =".$context->id."and name = 'CHALLENGER'");
+                    $bank = $DB->get_records_sql("SELECT id FROM {question} WHERE qtype='truefalse' and category =".$category);
+                    #print_r($bank);
+                    $idarray = array_rand( $bank, $num = 1);
+                    $challenger_question = new \stdClass();
+                    $challenger_question->course = $COURSE->id;
+                    $challenger_question->idquestion = $bank[$idarray]->id;
+    
+                    $DB->insert_record('challenger_question', $challenger_question);
+                }
+                else{
+                   # print_r('NO existe la categoria');
+                    $this->hascategory =false;
+                }
             }
-            else{
-                print_r('NO existe la categoria');
-                $this->hascategory =false;
-            }
-        }
-        #print_r(' existe primera tarea');
+
+
 
 
     }
@@ -94,13 +92,23 @@ class block_challenger_question extends block_base {
         global $course;
         global $USER;
 
+        $this-> set_first_question();  
 
-        $renderable = new \block_challenger_question\output\challenger_question($this->config);
-        $renderer = $this->page->get_renderer('block_challenger_question');
+        if($this->hascategory  == false) {
+    
+            $this->content = new stdClass();
+            $this->content->text = 'Añade preguntas en el banco';
+            $this->content->footer = '';
+        }
+        else{
+            $renderable = new \block_challenger_question\output\challenger_question($this->config);
+            $renderer = $this->page->get_renderer('block_challenger_question');
+    
+            $this->content = new stdClass();
+            $this->content->text = $renderer->render($renderable);
+            $this->content->footer = '';
+        }
 
-        $this->content = new stdClass();
-        $this->content->text = $renderer->render($renderable);
-        $this->content->footer = '';
         return $this->content;
     }
 
