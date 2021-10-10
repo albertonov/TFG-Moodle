@@ -40,8 +40,12 @@
     aria-describedby="post-content-{{id}}"
 >
     {{! The firstpost and starter classes below aren't used for anything other than to identify the first post in behat. }}
+    
     <div
-    style=" background-color: #F7DC6F;  border-radius: 25px;"
+        {{#isgoodquestion}}
+        style="  background-color: #F7DC6F;  border-radius: 25px;"
+        {{/isgoodquestion}}
+    
         class="d-flex border p-2 mb-2 forumpost focus-target {{#unread}}unread{{/unread}} {{#firstpost}}firstpost starter{{/firstpost}}"
         aria-label='{{#str}} postbyuser, mod_forum, {"post": "{{subject}}", "user": "{{author.fullname}}"} {{/str}}'
         data-post-id="{{id}}" data-content="forum-post"
@@ -92,6 +96,8 @@
                                     src="/moodle/user/pix.php/{{user1.id}}/f1.jpg"
                                     style="  max-width: 30px; text-align: right; "
                                     title="{{user1.name}}"
+                                    data-toggle="tooltip"
+
                                 > 
                             </a>
 
@@ -103,15 +109,28 @@
                                     src="/moodle/user/pix.php/{{user2.id}}/f1.jpg"
                                     style="  max-width: 30px; text-align: right; "
                                     title="{{user2.name}}"
+                                    data-toggle="tooltip"
+
                                 > 
                             </a>
 
                             {{/user2.show}}  
                             
                             {{#restofuser.show}} 
-                                y  {{restofuser.numero}} personas mas encuentran util este mensaje{{restofuser.lista}}
+                                y  {{restofuser.numero}} personas mas encuentran útil este mensaje
                             
-                            {{/restofuser.show}}          
+                            {{/restofuser.show}}       
+                            {{^restofuser.show}} 
+                                {{#user2.show}}
+                                    Consideran útil esta respuesta
+                                {{/user2.show}}
+                                {{^user2.show}}
+                                    {{#user1.show}}
+                                     Considera útil esta respuesta
+                                    {{/user1.show}}
+                                {{/user2.show}}
+                            {{/restofuser.show}}        
+                            
                         </div>
                     {{/isdeleted}}
                     {{#isprivatereply}}

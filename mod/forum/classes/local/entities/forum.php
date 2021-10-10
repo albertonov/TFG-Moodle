@@ -691,26 +691,49 @@ class forum {
     }
 
 
-    public function get_qualification_number($postid) : int {
+    public function get_good_qualification_number($postid) : int {
         global $DB;
-        $sql = " SELECT    COUNT(*)  FROM {post_qualifications} WHERE id_post = $postid";
+        $sql = " SELECT    COUNT(*)  FROM {post_qualifications} WHERE qual <> 'negative' and id_post = $postid";
         return $DB->get_field_sql($sql);
     }
     
-    public function get_qualification_users($postid, $userid) {
+    public function get_good_qualification_users($postid, $userid) {
         
         global $DB;
-        $sql = " SELECT  id_user  FROM {post_qualifications} WHERE id_post = $postid";
+        $sql = " SELECT  id_user  FROM {post_qualifications} WHERE qual <> 'negative' and id_post = $postid";
         $idlist = $DB->get_fieldset_sql($sql);
 
-        /*if (in_array($userid, $idlist)) {
-            #user has voted, move to first position
 
-            print_error (array_search($userid, $idlist));
-
-        }*/
         return  $idlist;
         
+    }
+
+    public function is_good_post($id, $total) {
+        global $DB;
+        #querys sencillas para test. Realizar todo en una consulta eficiente mas tarde
+
+        if($total < 2) {
+            return false;
+        }
+        $positivenumber = $DB->get_field_sql("SELECT count(*)
+                                                FROM mdl_post_qualifications p
+                                                WHERE id_post = $id and qual = 'positive'
+                                            ");
+
+        $negativenumber = $DB->get_field_sql ("SELECT count(*) 
+        FROM mdl_post_qualifications p
+        WHERE id_post = $id and qual = 'negative'
+                                            ");  
+        $likenumber = $DB->get_field_sql("SELECT count(*)
+        FROM mdl_post_qualifications p
+        WHERE id_post = $id and qual = 'like'
+                                            ");   
+
+        if (($positivenumber + $likenumber)/ $total > 0.5) {
+            return true;
+
+        }
+        return false;
     }
     
 }
