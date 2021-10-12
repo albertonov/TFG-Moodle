@@ -455,9 +455,10 @@ class post extends exporter {
                 $restofuser = [];
 
                 foreach ($idlistqual as &$idus) {
-                    array_push($restofuser, \core_user::get_user($idlistqual[0])->firstname);
-                    $restofuserstring = implode(",", $restofuser);
+                    array_push($restofuser, \core_user::get_user($idlistqual[0])->firstname.' '.\core_user::get_user($idlistqual[0])->lastname);
                 }
+                $restofuserstring = implode(",", $restofuser);
+
             }
 
         }
@@ -530,12 +531,12 @@ class post extends exporter {
 
             'user1' => [
                 'id' => is_null( $user1) ? null :  $user1->id,
-                'name' => is_null( $user1) ? null : $user1->firstname,
+                'name' => is_null( $user1) ? null : $user1->firstname.' '.$user1->lastname,
                 'show'=> is_null( $user1) ? false : true
             ],
             'user2' => [
                 'id' => is_null( $user2) ? null : $user2->id,
-                'name' => is_null( $user2) ? null : $user2->firstname,
+                'name' => is_null( $user2) ? null : $user2->firstname.' '.$user2->lastname,
                 'show'=> is_null( $user2)? false : true
             ],
             'course' => $forum->get_course_id(),

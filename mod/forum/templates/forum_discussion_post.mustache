@@ -117,7 +117,7 @@
                             {{/user2.show}}  
                             
                             {{#restofuser.show}} 
-                                y  {{restofuser.numero}} personas mas encuentran útil este mensaje
+                                y <a title="{{restofuser.lista}}" data-toggle="tooltip">  {{restofuser.numero}}  </a>personas mas encuentran útil este mensaje
                             
                             {{/restofuser.show}}       
                             {{^restofuser.show}} 
@@ -130,8 +130,9 @@
                                     {{/user1.show}}
                                 {{/user2.show}}
                             {{/restofuser.show}}        
-                            
+
                         </div>
+
                     {{/isdeleted}}
                     {{#isprivatereply}}
                         <div class="privatereplyinfo">
@@ -141,7 +142,10 @@
                     {{#hasreplycount}}
                         <span class="sr-only">{{#str}} numberofreplies, mod_forum, {{replycount}} {{/str}}</span>
                     {{/hasreplycount}}
+                    {{#isgoodquestion}}<p><span class="badge badge-success">Marcado como buena respuesta</span></p> {{/isgoodquestion}}
+
                 </div>
+
             </header>
 
             <div class="d-flex body-content-container">
