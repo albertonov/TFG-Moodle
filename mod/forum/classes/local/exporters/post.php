@@ -443,7 +443,7 @@ class post extends exporter {
         $user1 = null;
         $user2 = null;
         $restofuserstring = null;
-        $numberofqual = $forum->get_good_qualification_number($post->get_id());
+        $numberofqual = $forum->get_total_qualification_number($post->get_id());
         if ($numberofqual > 0){
             $idlistqual = $forum->get_good_qualification_users($post->get_id(),$user->id);
             $user1 = \core_user::get_user($idlistqual[0]);

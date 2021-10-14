@@ -672,12 +672,7 @@ class forum {
 
 
 
-    /**
-     * Hay alguna votacion ya emitida? - Takes into account both discussion settings AND forum's criteria
-     *
-     * @param discussion_entity $discussion The discussion to check
-     * @return bool
-     */
+
     public function has_qualification_emited($postid, $userid) : string {
         global $DB;
         $qual = null;
@@ -690,7 +685,12 @@ class forum {
         return $qual;
     }
 
-
+    public function get_total_qualification_number($postid) : int {
+        global $DB;
+        $sql = " SELECT    COUNT(*)  FROM {post_qualifications} WHERE   id_post = $postid";
+        return $DB->get_field_sql($sql);
+    }
+    
     public function get_good_qualification_number($postid) : int {
         global $DB;
         $sql = " SELECT    COUNT(*)  FROM {post_qualifications} WHERE qual <> 'negative' and id_post = $postid";
@@ -716,19 +716,18 @@ class forum {
             return false;
         }
         $positivenumber = $DB->get_field_sql("SELECT count(*)
-                                                FROM mdl_post_qualifications p
+                                                FROM {post_qualifications} p
                                                 WHERE id_post = $id and qual = 'positive'
                                             ");
 
         $negativenumber = $DB->get_field_sql ("SELECT count(*) 
-        FROM mdl_post_qualifications p
+        FROM {post_qualifications} p
         WHERE id_post = $id and qual = 'negative'
                                             ");  
         $likenumber = $DB->get_field_sql("SELECT count(*)
-        FROM mdl_post_qualifications p
+        FROM {post_qualifications} p
         WHERE id_post = $id and qual = 'like'
                                             ");   
-
         if (($positivenumber + $likenumber)/ $total > 0.5) {
             return true;
 

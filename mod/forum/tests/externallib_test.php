@@ -754,6 +754,7 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                 'show' => null,
             ),
             'course'=> strval($course1->id),
+            'isgoodquestion' => false
 
         );
 
@@ -836,6 +837,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                 'show' => null,
             ),
             'course'=> strval($course1->id),
+            'isgoodquestion' => false
+
         );
 
         // Test a discussion with two additional posts (total 3 posts).
@@ -2891,6 +2894,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'show' => null,
                         ),
                         'course'=> strval($course1->id),
+                        'isgoodquestion' => false
+
                     ]
                 ],
                 'parentposts' => [
@@ -2976,6 +2981,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'show' => null,
                         ),
                         'course'=> strval($course1->id),
+                        'isgoodquestion' => false
+
                     ]
                 ],
             ],
@@ -3078,6 +3085,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'show' => null,
                         ),
                         'course'=> strval($course1->id),
+                        'isgoodquestion' => false
+
                     ]
                 ],
                 'parentposts' => [
@@ -3164,7 +3173,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                                 'show' => null,
                             ),
                             'course'=> strval($course1->id),
-                        
+                            'isgoodquestion' => false
+
                     ],
                 ]
             ],

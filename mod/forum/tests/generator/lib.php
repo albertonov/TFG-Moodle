@@ -337,9 +337,41 @@ class mod_forum_generator extends testing_module_generator {
 
         // Update the last post.
         forum_discussion_update_last_post($record->discussion);
-
         return $record;
     }
+
+
+
+    public function create_qual($record = null) {
+        global $DB;
+
+        // Increment the forum post count.
+        $this->forumpostcount++;
+
+
+        $newqual = new stdClass();
+        $newqual->id_post = $record->id_post;
+        $newqual->id_user = $record->id_user;
+        $newqual->qual =  $record->qual;
+
+        $newqual = (object) $newqual;
+        \mod_forum\local\entities\post::add_message_counts($record);
+
+        // Add the qual.
+        $record->id = $DB->insert_record('post_qualifications', $newqual);
+        #simulate add experience
+        #user who qualificates
+        core_user::user_add_experience_to_total_and_course($record->userwhoqualificate, 15,$record->courseid);
+        
+        #user who is qualificated
+        core_user::user_add_experience_to_total_and_course($record->userqualificated, 5,$record->courseid);
+
+
+        // Update the last post.
+        forum_discussion_update_last_post(  $record->discussion);
+        return $record;
+    }
+
 
     public function create_content($instance, $record = array()) {
         global $USER, $DB;
