@@ -121,6 +121,8 @@ class post extends exporter {
             'haslikequal' => ['type' => PARAM_BOOL],
             'hasemptyqual' => ['type' => PARAM_BOOL],
             'numberqual' => ['type' => PARAM_INT],
+            'isgoodquestion' => ['type' => PARAM_BOOL],
+
             'user1' => ['type' => 
             [
                 'id' => ['type' => PARAM_INT, 'null' => NULL_ALLOWED], 
@@ -441,9 +443,9 @@ class post extends exporter {
         $user1 = null;
         $user2 = null;
         $restofuserstring = null;
-        $numberofqual = $forum->get_qualification_number($post->get_id());
+        $numberofqual = $forum->get_total_qualification_number($post->get_id());
         if ($numberofqual > 0){
-            $idlistqual = $forum->get_qualification_users($post->get_id(),$user->id);
+            $idlistqual = $forum->get_good_qualification_users($post->get_id(),$user->id);
             $user1 = \core_user::get_user($idlistqual[0]);
             if ($numberofqual > 1){
                 $user2 = \core_user::get_user($idlistqual[1]);
@@ -453,13 +455,14 @@ class post extends exporter {
                 $restofuser = [];
 
                 foreach ($idlistqual as &$idus) {
-                    array_push($restofuser, \core_user::get_user($idlistqual[0])->firstname);
-                    $restofuserstring = implode(",", $restofuser);
+                    array_push($restofuser, \core_user::get_user($idlistqual[0])->firstname.' '.\core_user::get_user($idlistqual[0])->lastname);
                 }
+                $restofuserstring = implode(",", $restofuser);
+
             }
 
         }
-
+        $isgoodquestion =  $numberofqual == 0 ? false : $forum->is_good_post($post->get_id(), $numberofqual);
             
 
         #print_error($forum->get_qualification_users($post->get_id())[2]);
@@ -524,14 +527,16 @@ class post extends exporter {
             'haslikequal' => $hasqual === "like" ? true : false,
             'hasemptyqual' => $hasqual === "empty" ? true : false,
             'numberqual' => $numberofqual,
+            'isgoodquestion' => $isgoodquestion,
+
             'user1' => [
                 'id' => is_null( $user1) ? null :  $user1->id,
-                'name' => is_null( $user1) ? null : $user1->firstname,
+                'name' => is_null( $user1) ? null : $user1->firstname.' '.$user1->lastname,
                 'show'=> is_null( $user1) ? false : true
             ],
             'user2' => [
                 'id' => is_null( $user2) ? null : $user2->id,
-                'name' => is_null( $user2) ? null : $user2->firstname,
+                'name' => is_null( $user2) ? null : $user2->firstname.' '.$user2->lastname,
                 'show'=> is_null( $user2)? false : true
             ],
             'course' => $forum->get_course_id(),

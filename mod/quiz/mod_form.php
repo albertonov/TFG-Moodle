@@ -162,6 +162,25 @@ class mod_quiz_mod_form extends moodleform_mod {
         $mform->addHelpButton('navmethod', 'navmethod', 'quiz');
 
         // -------------------------------------------------------------------------------
+
+        $name = get_string('gamificationheader', 'assign');
+        $mform->addElement('header', 'gamificationheader',  $name);
+        $name = get_string('gamificationenabled', 'assign');
+        $mform->addElement('selectyesno', 'GamificationEnabled', $name);
+
+        $options = array();
+        $options[0] = 'Fácil';
+        $options[1] = 'Normal';
+        $options[2] = 'Dificil';
+        $options[3] = 'Muy dificil';
+
+        $name = get_string('gamificationlevel', 'assign');
+        $mform->addElement('select', 'multiplicador', $name, $options);
+        $mform->disabledIf('multiplicador', 'GamificationEnabled', 'no');
+
+
+
+
         $mform->addElement('header', 'interactionhdr', get_string('questionbehaviour', 'quiz'));
 
         // Shuffle within questions.
