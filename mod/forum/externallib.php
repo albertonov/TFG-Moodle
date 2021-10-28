@@ -1273,15 +1273,18 @@ class mod_forum_external extends external_api {
         $coursecontext = \context_course::instance($forum->get_course_id());
         $discussionsubscribe = \mod_forum\subscriptions::get_user_default_subscription($forumrecord, $coursecontext,
             $cm, null);
-
         // Validate options.
+
         $options = array(
             'discussionsubscribe' => $discussionsubscribe,
             'private'             => false,
             'inlineattachmentsid' => 0,
             'attachmentsid' => null,
-            'topreferredformat'   => false
+            'topreferredformat'   => false,
+            'anom'   => false
+
         );
+
         foreach ($params['options'] as $option) {
             $name = trim($option['name']);
             switch ($name) {
@@ -1291,6 +1294,9 @@ class mod_forum_external extends external_api {
                 case 'private':
                     $value = clean_param($option['value'], PARAM_BOOL);
                     break;
+                case 'anom':
+                    $value = clean_param($option['value'], PARAM_BOOL);
+                    break;                
                 case 'inlineattachmentsid':
                     $value = clean_param($option['value'], PARAM_INT);
                     break;
@@ -1339,6 +1345,7 @@ class mod_forum_external extends external_api {
         $post->itemid = $options['inlineattachmentsid'];
         $post->attachments = $options['attachmentsid'];
         $post->isprivatereply = $options['private'];
+        $post->anonimousreply = $options['anom'];
         $post->deleted = 0;
         $fakemform = $post->attachments;
         if ($postid = forum_add_new_post($post, $fakemform)) {

@@ -82,7 +82,14 @@
                     {{/subjectheading}}
                     {{^isdeleted}}
                         <div class="mb-3" tabindex="-1">
+                            {{#isanomreply}}
+                            By Un autor anonimo
+                            {{/isanomreply}}
+                            {{^isanomreply}}
                             {{#html.authorsubheading}}{{{.}}}{{/html.authorsubheading}}
+                            {{/isanomreply}}
+
+
                             {{^html.authorsubheading}}
                                 {{< core/time_element }}
                                     {{$elementid}}created-{{id}}-{{uniqid}}{{/elementid}}
@@ -182,7 +189,7 @@
 
                 <div class="no-overflow w-100 content-alignment-container">
                     <div id="post-content-{{id}}" class="post-content-container">
-                        {{{message}}}
+                        {{{message}}} {{isanomreply}}
                     </div>
 
                     {{^isdeleted}}
