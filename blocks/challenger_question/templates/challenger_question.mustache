@@ -1,0 +1,37 @@
+
+
+
+{{#answered}}
+    {{#iscorrect}}
+        
+            {{{question.questiontext}}}
+            <b>Feedback del profesor:</b> {{feedbackcorrect}}
+        <div style="background-color: lightgreen; border-radius: 5px;">
+            Respuesta correcta, has ganado<b> 20 pts.exp </b> . Habra otra pregunta mañana...
+        </div>
+
+
+    {{/iscorrect}}
+    {{^iscorrect}}
+       
+            {{{question.questiontext}}}
+            <b>Feedback del profesor: </b>{{feedbackincorrect}}
+
+        <div style="background-color: lightcoral;   border-radius: 5px;">
+            Respuesta incorrecta, has ganado solo <b>5 pts.exp </b>  . habra otra pregunta mañana...
+        </div>
+
+    {{/iscorrect}}
+
+{{/answered}}
+{{^answered}}
+{{{question.questiontext}}}
+
+<a href="{{trueurl}}" class="btn btn-success" role="button">Verdadero</a>
+
+<a href="{{falseurl}}" class="btn btn-danger" role="button">Falso</a>
+
+
+{{/answered}}
+
+
