@@ -22,36 +22,44 @@ function get_user_experience_from_courses($userid)
 
 function create_experience_chart($records)
 {
-
+        
     $arrayseries = array();
     $arraylabels = array();
+
     foreach ($records as &$record) {
         array_push($arrayseries, $record->courseexperience);
         array_push($arraylabels, $record->fullname);
     }
 
-    $serie = new core\chart_series('Experiencia', $arrayseries);
-
-
-    $factory = new factory;
-    return $factory-> create_doughnut_chart(array($serie), array($arraylabels));
+    $factory = new piechart_factory($arrayseries, $arraylabels, 'Experiencia');
+    return  $factory->create_chart('doughnut');
 }
 
 function create_attendance_chart($records)
 {
+    $end=date_create(array_key_last( $records));
+    $begin =$end->sub(new DateInterval('P6D'));
+    $end=date_create(array_key_last( $records));
+
+    $interval = new DateInterval('P1D');
+    $period=new DatePeriod($begin,$interval,$end);
+
     $arraylabels = array();
     $arrayseries = array();
 
-
-    foreach($records as $key => $record) {
-        array_push($arraylabels,  date('D', strtotime($key)));
-        array_push($arrayseries, $records[$key]);
-
+    foreach ($period as $day){
+      $usercount= isset($records[$day->format('m/d/Y')]) ? $records[$day->format('m/d/Y')] :0;
+      array_push($arraylabels, $day->format('D'));
+      array_push($arrayseries,$usercount);
     }
+    $key=array_key_last( $records);
+    array_push($arraylabels,  date('D', strtotime($key)));
+    array_push($arrayseries, $records[$key]);
+    
 
-    $serie = new core\chart_series('Conexiones', $arrayseries);
-    $factory = new factory;
-    return $factory-> create_line_chart(array($serie), array($arraylabels));
+    $factory = new linechart_factory($arrayseries, $arraylabels, 'Conexiones');
+
+    return  $factory->create_chart('smooth');
 }
 
 
@@ -61,24 +69,6 @@ function get_last_five_grades_qualificated($userid)
     #recibir id y obtener los ultimos 5 quizs o tareas calificadas
     global $DB;
 
-    /*
-    $recordsassigns = $DB->get_records_sql("SELECT ag.timemodified as timemodified, ag.grade, ag.assignment, ag.attemptnumber, 'assign' as tipo, a.course, a.name
-    FROM {assign_grades} ag 
-    INNER JOIN {assign} a
-    ON a.id = ag.assignment
-    WHERE ag.userid = ?
-    ORDER BY ag.timemodified DESC limit 5"
-    , array($userid));
-
-
-    $recordsquizs = $DB->get_records_sql("SELECT qg.timemodified as timemodified, qg.grade, qg.quiz, 'quiz' as tipo, q.course, q.name
-    FROM {quiz_grades} qg
-    INNER JOIN {quiz} q
-    ON q.id = qg.quiz
-    WHERE qg.userid = ?
-    ORDER BY qg.timemodified DESC limit 5"
-    , array($userid));
-*/
 
     $recordsassigns = $DB->get_records_sql(
         "    SELECT ag.timemodified as timemodified, ag.grade, ag.assignment, ag.attemptnumber, 'assign' as tipo, a.course, a.name, asub.media
@@ -137,7 +127,13 @@ function get_last_five_grades_qualificated($userid)
                 'SELECT id FROM {course_modules} WHERE module = 17 AND course = ? AND instance = ?',
                 array($record->course, $record->quiz)
             );
+            $lastattemptid =    $DB->get_field_sql(
+                'SELECT id FROM {quiz_attempts} WHERE quiz = ? AND userid = ? ORDER BY attempt DESC limit 1',
+                array($record->quiz,$userid)
+            );
             $record->url = '../../../moodle/mod/quiz/view.php?id=' . $idurl;
+            $record->urlreview = '../../../moodle/mod/quiz/review.php?attempt='.$lastattemptid.'&cmid='.$idurl;
+
             $record->isquiz = true;
         } else {
             $idurl =    $DB->get_field_sql(
@@ -173,6 +169,8 @@ function get_user_attendance($userid, $fromtime){
         array_push($dates, date('m/d/Y', $record->timecreated));
     }
     return  array_count_values($dates);
+
+    
 }
 
 

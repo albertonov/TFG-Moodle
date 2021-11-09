@@ -83,7 +83,7 @@
             <div class="row">
               <div class="col-sm">
                 {{#isquiz}}
-                {{#pix}} icon, quiz {{/pix}}
+                {{#pix}} icon, quiz {{/pix}} 
                 {{/isquiz}}
 
                 {{^isquiz}}
@@ -101,8 +101,12 @@
             <div class="row">
               <div class="col-sm">
                 <div class="dt">
-                  <small>calificado el {{date}}</small>
+                  <small>calificado el {{date}} </small>
+                  {{#isquiz}}
+                  <small>  &nbsp; - <a href="{{urlreview}}"> Revisión</a> </small>
+                  {{/isquiz}}
                 </div>
+
               </div>
             </div>
 
