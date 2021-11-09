@@ -285,6 +285,12 @@ class post {
         return !empty($this->privatereplyto);
     }
 
+
+    public function is_anom_reply() : bool {
+        global $DB;
+        return $DB->get_field_sql('SELECT anonimousreply FROM {forum_posts} WHERE id = ?', array($this->id));
+    }
+
     /**
      * Get the id of the user that this post was intended for.
      *
