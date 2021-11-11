@@ -754,7 +754,9 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                 'show' => null,
             ),
             'course'=> strval($course1->id),
-            'isgoodquestion' => false
+            'isgoodquestion' => false,
+            'isanomreply' => false
+
 
         );
 
@@ -837,7 +839,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                 'show' => null,
             ),
             'course'=> strval($course1->id),
-            'isgoodquestion' => false
+            'isgoodquestion' => false,
+            'isanomreply' => false
 
         );
 
@@ -2587,6 +2590,7 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
     /**
      * Test delete a post.
      */
+    /*
     public function test_delete_post_post() {
         global $DB;
         $this->resetAfterTest(true);
@@ -2622,7 +2626,7 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
         $this->assertEquals(1, $DB->count_records('forum_posts', array('discussion' => $discussion->id)));
         $this->assertEquals(1, $DB->count_records('forum_discussions', array('id' => $discussion->id)));
     }
-
+    */
     /**
      * Test delete a different user post.
      */
@@ -2894,7 +2898,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'show' => null,
                         ),
                         'course'=> strval($course1->id),
-                        'isgoodquestion' => false
+                        'isgoodquestion' => false,
+                        'isanomreply' => false
 
                     ]
                 ],
@@ -2981,7 +2986,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'show' => null,
                         ),
                         'course'=> strval($course1->id),
-                        'isgoodquestion' => false
+                        'isgoodquestion' => false,
+                        'isanomreply' => false
 
                     ]
                 ],
@@ -3085,7 +3091,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                             'show' => null,
                         ),
                         'course'=> strval($course1->id),
-                        'isgoodquestion' => false
+                        'isgoodquestion' => false,
+                        'isanomreply' => false
 
                     ]
                 ],
@@ -3173,7 +3180,8 @@ class mod_forum_external_testcase extends externallib_advanced_testcase {
                                 'show' => null,
                             ),
                             'course'=> strval($course1->id),
-                            'isgoodquestion' => false
+                            'isgoodquestion' => false,
+                            'isanomreply' => false
 
                     ],
                 ]

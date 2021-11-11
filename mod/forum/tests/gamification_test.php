@@ -4,7 +4,7 @@
 class mod_forum_gamification_testcase extends advanced_testcase {
 
     
-    public function test_subjects() {
+    public function test_gamification() {
         global $DB;
 
         $this->resetAfterTest(true);

@@ -17,6 +17,16 @@
     ),
 
 
+    'block/ranking:myaddinstance' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+        ),
+
+        'clonepermissionsfrom' => 'moodle/my:manageblocks'
+    ),
+
+
     'block/ranking:viewhimself' => array(
 
         'captype' => 'read',

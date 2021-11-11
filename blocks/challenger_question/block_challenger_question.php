@@ -112,5 +112,6 @@ class block_challenger_question extends block_base {
         return $this->content;
     }
 
+    
 }
 

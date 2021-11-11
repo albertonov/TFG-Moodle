@@ -1534,6 +1534,7 @@ class mod_forum_events_testcase extends advanced_testcase {
     /**
      * Test post_deleted event.
      */
+    /*
     public function test_post_deleted() {
         global $DB;
 
@@ -1619,7 +1620,7 @@ class mod_forum_events_testcase extends advanced_testcase {
             }
         }
     }
-
+    */
     /**
      * Test post_deleted event for a single discussion forum.
      */
