@@ -43,6 +43,7 @@ jobs:
 
       - name: Running PHPUnit tests
         run: |
-          winpty docker login trabajofindegradoalbertonovillo.azurecr.io -u ${{ secrets.AZURE_USERNAME }} -p ${{ secrets.AZURE_PASS }}
+          echo ${{ secrets.AZURE_USERNAME }}
+          docker login trabajofindegradoalbertonovillo.azurecr.io -u ${{ secrets.AZURE_USERNAME }} -p ${{ secrets.AZURE_PASS }}
           docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
           docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
