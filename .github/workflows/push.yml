@@ -50,17 +50,9 @@ jobs:
       - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
         uses: actions/checkout@v2
 
-      - name: Setting up PHPUnit
-        env:
-          dbtype: ${{ matrix.db }}
-        run: |
-          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
-          cp .github/workflows/config-template.php config.php
-          mkdir ../moodledata
-          sudo locale-gen en_AU.UTF-8
-          php admin/tool/phpunit/cli/init.php --no-composer-self-update
+      - name: Crear contenedor
 
-      - name: Running PHPUnit tests
-        env:
-          dbtype: ${{ matrix.db }}
-        run: vendor/bin/phpunit -v
+        run: |
+          docker login trabajofindegradoalbertonovillo.azurecr.io -p yHXELhOnlZJLOptCaQB=XiTl=dDeXkqI -u trabajofindegradoalbertonovillo
+          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
+          docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
