@@ -461,7 +461,8 @@ class assign_submission_status implements renderable {
                                 $gradingstatus,
                                 $preventsubmissionnotingroup,
                                 $usergroups, 
-                                $timeestimated 
+                                $timeestimated,
+                                $rest
                                 ) {
         $this->allowsubmissionsfromdate = $allowsubmissionsfromdate;
         $this->alwaysshowdescription = $alwaysshowdescription;
@@ -494,6 +495,7 @@ class assign_submission_status implements renderable {
         $this->preventsubmissionnotingroup = $preventsubmissionnotingroup;
         $this->usergroups = $usergroups;
         $this->timeestimated = $timeestimated;
+        $this->rest = $rest;
 
     }
 }

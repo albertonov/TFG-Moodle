@@ -680,6 +680,9 @@ class mod_assign_renderer extends plugin_renderer_base {
         $t = new html_table();
 
         $warningmsg = '';
+
+        $this->add_table_row_tuple($t, 'Enviados', $status->rest);
+
         if ($status->teamsubmissionenabled) {
             $cell1content = get_string('submissionteam', 'assign');
             $group = $status->submissiongroup;

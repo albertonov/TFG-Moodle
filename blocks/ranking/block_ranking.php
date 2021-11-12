@@ -191,4 +191,7 @@ class block_ranking extends block_base {
     public function instance_allow_multiple() {
         return false;
        }
+       
+
+    
 }

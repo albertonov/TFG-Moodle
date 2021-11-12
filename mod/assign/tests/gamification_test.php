@@ -8,12 +8,10 @@ require_once($CFG->dirroot . '/mod/assign/tests/generator.php');
 
 
 /**
- * Provides the unit tests for feedback.
+ * Provides the unit tests for gamification.
  *
  * @package     mod_assign
  * @category    test
- * @copyright   2019 Ilya Tregubov ilyatregubov@catalyst-au.net
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_assign_gamification_testcase extends advanced_testcase {
 

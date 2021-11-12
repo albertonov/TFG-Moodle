@@ -147,6 +147,7 @@ class post extends exporter {
             ],
 
             'course' => ['type' => PARAM_INT],
+            'isanomreply' => ['type' => PARAM_BOOL],
 
 
             
@@ -463,9 +464,9 @@ class post extends exporter {
 
         }
         $isgoodquestion =  $numberofqual == 0 ? false : $forum->is_good_post($post->get_id(), $numberofqual);
-            
+        $isanomreply = $post->is_anom_reply();
 
-        #print_error($forum->get_qualification_users($post->get_id())[2]);
+
 
 
         $authorexporter = new author_exporter(
@@ -545,6 +546,8 @@ class post extends exporter {
                 'numero' => is_null( $restofuserstring)? null :count($restofuser),
                 'show'=> is_null( $restofuserstring)? false : true
             ],
+            'isanomreply' => $isanomreply,
+
 
             'capabilities' => [
                 'view' => $canview,
@@ -758,6 +761,9 @@ class post extends exporter {
         return get_string('bynameondate', 'mod_forum', ['name' => $name, 'date' => $date]);
     }
 
+
+
+    
     /**
      * Get the start time for a post.
      *

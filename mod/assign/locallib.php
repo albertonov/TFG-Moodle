@@ -4069,7 +4069,8 @@ class assign {
                                                                      $this->get_grading_status($userid),
                                                                      $instance->preventsubmissionnotingroup,
                                                                      $usergroups,
-                                                                     $instance->timeestimated
+                                                                     $instance->timeestimated,
+                                                                     $this->rest_participers($instance->get_instance()->id)
                                                                     );
             $o .= $this->get_renderer()->render($submissionstatus);
         }
@@ -4141,6 +4142,17 @@ class assign {
 
         return $o;
     }
+
+
+    public function rest_participers($assignid) {
+        global $DB, $USER;
+        $this->get_instance()->id;
+        $total = $DB->get_field_sql('SELECT count(*) from {assign_submission} WHERE assignment = ? ', array($assignid));
+        $enviados = $DB->get_field_sql("SELECT count(*) from {assign_submission} WHERE assignment = ? and status = 'submitted'", array($assignid));
+
+        return $enviados.'/'.$total;
+    }
+
 
     /**
      * Print the grading page for a single user submission.
@@ -4265,7 +4277,9 @@ class assign {
                                                              $this->get_grading_status($userid),
                                                              $instance->preventsubmissionnotingroup,
                                                              $usergroups,
-                                                             $instance->timeestimated);
+                                                             $instance->timeestimated,
+                                                             $this->rest_participers($this->get_instance()->id)
+                                                            );
             $o .= $this->get_renderer()->render($submissionstatus);
         }
 
@@ -5328,7 +5342,8 @@ class assign {
                                                           $gradingstatus,
                                                           $instance->preventsubmissionnotingroup,
                                                           $usergroups,
-                                                          $instance->timeestimated);
+                                                          $instance->timeestimated,
+                                                          $this->rest_participers($this->get_instance()->id));
         return $submissionstatus;
     }
 
