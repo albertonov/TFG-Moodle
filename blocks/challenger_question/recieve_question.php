@@ -20,6 +20,27 @@ if($answer == 'Verdadero' || $answer == 'Falso'   ){
     if(!$exists) {
         $correctanswer = $DB->get_record_sql('SELECT * FROM {question_answers} WHERE fraction=1 and question = '.$idquestion);
 
+        
+        if($correctanswer->answer == 'Verdadero'){
+            $escorrecta  = true;
+        }
+        elseif($correctanswer->answer == 'True'){
+            $escorrecta  = true;
+        }
+        elseif($correctanswer->answer == 'Falso'){
+            $escorrecta  = false;
+        }
+        else{
+            $escorrecta  = false;
+        }
+
+        if($answer == 'Verdadero'){
+            $answer  = true;
+        }
+        else{
+            $answer  = false;
+        }
+
 
         $challenger_user_questions = new \stdClass();
         $challenger_user_questions->course = $idcourse;
@@ -27,7 +48,7 @@ if($answer == 'Verdadero' || $answer == 'Falso'   ){
         $challenger_user_questions->userid = $USER->id;
     
         
-        if ($answer ==  $correctanswer->answer){
+        if ($answer ==  $escorrecta){
             #respuesta correcta
             $challenger_user_questions->iscorrect = 1;
             \core_user::user_add_experience_to_total_and_course($USER->id, 20, $idcourse ); 

@@ -58,9 +58,9 @@ class challenger_question implements renderable, templatable {
         if( $exists) {
             $data->answered = true;
             $data->iscorrect = $DB->get_field_sql('SELECT iscorrect FROM {challenger_user_questions} WHERE userid ='.$USER->id.' and id_challenger ='.$idchallenger->id);
-            $data->feedbackcorrect = $DB->get_field_sql("SELECT feedback FROM {question_answers} WHERE answer = 'Verdadero' and question =".$question->id);
-            $data->feedbackincorrect = $DB->get_field_sql("SELECT feedback FROM {question_answers} WHERE  answer = 'Falso' and question =".$question->id);
-            #print_r($question->id);
+            $data->feedbackcorrect = $DB->get_field_sql("SELECT feedback FROM {question_answers} WHERE (answer = 'True' or answer = 'Verdadero')  and question =".$question->id);
+            $data->feedbackincorrect = $DB->get_field_sql("SELECT feedback FROM {question_answers} WHERE   (answer = 'True' or answer = 'Verdadero') and question =".$question->id);
+            #print_r( $data->feedbackcorrect);
         }
         else{
             $data->answered = false;
