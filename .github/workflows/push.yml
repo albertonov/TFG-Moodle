@@ -64,3 +64,10 @@ jobs:
         env:
           dbtype: ${{ matrix.db }}
         run: vendor/bin/phpunit -v
+
+      - name: Crear contenedor
+
+        run: |
+          docker login trabajofindegradoalbertonovillo.azurecr.io -p yHXELhOnlZJLOptCaQB=XiTl=dDeXkqI -u trabajofindegradoalbertonovillo
+          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
+          docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
