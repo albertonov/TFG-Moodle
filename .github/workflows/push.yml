@@ -29,9 +29,39 @@ jobs:
 
     steps:
 
-      - name: Crear contenedor
-        env: 
-          USERNAME: ${{ secrets.AZURE_USERNAME }}
-        if:  env.USERNAME == 'trabajofindegradoalbertonovillo'
-        run: echo "I know what the secret token is!"
+name: Core
+
+on: [push]
+
+env:
+  php: 7.4
+
+jobs:
+
+
+  PHPUnit:
+    runs-on: ${{ matrix.os }}
+    services:
+      exttests:
+        image: moodlehq/moodle-exttests
+        ports:
+          - 8080:80
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-18.04
+            php: 7.4
+            db: pgsql
+
+    steps:
+
+    - run: 'echo "$SSH_KEY" > key'
+      shell: bash
+      env:
+        SSH_KEY: ${{secrets.AZURE_USERNAME}}
 
