@@ -30,5 +30,7 @@ jobs:
 
     steps:
       - name: Crear contenedor
-        if:  ${{ secrets.SECRET_KEY }} == 'HOLAMUNDO'
+        env: 
+          PRUEBA: ${{ secrets.SECRET_KEY }}
+        if:  env.PRUEBA == 'HOLAMUNDO'
         run: echo "I know what the secret token is!"
