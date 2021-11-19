@@ -1,10 +1,7 @@
 name: Core
 
 on: [push]
-secrets:
-      access-token:
-        description: 'A token passed from the caller workflow'
-        required: false
+
 env:
   php: 7.4
 
