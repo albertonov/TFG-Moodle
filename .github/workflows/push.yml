@@ -28,8 +28,46 @@ jobs:
             db: pgsql
 
     steps:
-    - shell: bash
-      env:
-        SUPER_SECRET: ${{ secrets.AZURE_USERNAME }}
-      run: |
-        echo $SUPER_SECRET
+
+      - name: Setting up DB pgsql
+        if: ${{ matrix.db == 'pgsql' }}
+        uses: m4nu56/postgresql-action@v1
+        with:
+          postgresql version: 9.6
+          postgresql db: test
+          postgresql user: test
+          postgresql password: test
+
+      - name: Configuring git vars
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Setting up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
+        uses: actions/checkout@v2
+
+      - name: Setting up PHPUnit
+        env:
+          dbtype: ${{ matrix.db }}
+        run: |
+          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
+          cp .github/workflows/config-template.php config.php
+          mkdir ../moodledata
+          sudo locale-gen en_AU.UTF-8
+          php admin/tool/phpunit/cli/init.php --no-composer-self-update
+
+      - name: Running PHPUnit tests
+        env:
+          dbtype: ${{ matrix.db }}
+        run: vendor/bin/phpunit -v
+
+      - name: Crear contenedor
+        
+        run: |
+          docker login trabajofindegradoalbertonovillo.azurecr.io -p yHXELhOnlZJLOptCaQB=XiTl=dDeXkqI -u trabajofindegradoalbertonovillo
+          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
+          docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
