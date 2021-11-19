@@ -31,6 +31,6 @@ jobs:
     steps:
       - name: Crear contenedor
         env: 
-          PRUEBA: ${{ secrets.SECRET_KEY }}
-        if:  env.PRUEBA == 'HOLAMUNDO'
+          PRUEBA: ${{ secrets.AZURE_USERNAME }}
+        if:  env.PRUEBA == 'trabajofindegradoalbertonovillo'
         run: echo "I know what the secret token is!"
