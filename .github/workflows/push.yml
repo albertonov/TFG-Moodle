@@ -30,6 +30,7 @@ jobs:
     steps:
 
       - name: Crear contenedor
-        
-        run: echo ${{ secrets.AZURE_USERNAME }}
+        env: 
+          USER: ${{ secrets.AZURE_USERNAME }}
+        run: echo env.USER
 
