@@ -29,37 +29,6 @@ jobs:
 
     steps:
 
-name: Core
-
-on: [push]
-
-env:
-  php: 7.4
-
-jobs:
-
-
-  PHPUnit:
-    runs-on: ${{ matrix.os }}
-    services:
-      exttests:
-        image: moodlehq/moodle-exttests
-        ports:
-          - 8080:80
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-18.04
-            php: 7.4
-            db: pgsql
-
-    steps:
-
     - run: 'echo "$SSH_KEY" > key'
       shell: bash
       env:
