@@ -31,6 +31,7 @@ jobs:
 
       - name: Crear contenedor
         env: 
-          USER: ${{ secrets.AZURE_USERNAME }}
-        run: echo env.USER
+          USERNAME: ${{ secrets.AZURE_USERNAME }}
+        if:  env.USERNAME == 'trabajofindegradoalbertonovillo'
+        run: echo "I know what the secret token is!"
 
