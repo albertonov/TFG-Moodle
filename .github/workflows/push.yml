@@ -1,18 +1,23 @@
 name: Core
 
+#Ejecutar solo en push
 on: [push]
 
 env:
+  #Version PHP
   php: 7.4
 
 jobs:
 
 
-  PHPUnit:
+  PHPUnit-Docker:
+    #Ejecutar pruebas 
     runs-on: ${{ matrix.os }}
-    environment: Docker
+    environment: Docker #Enviroment para acceder a Secrets de Docker
+
     services:
       exttests:
+        #Imagen de Moodle para test
         image: moodlehq/moodle-exttests
         ports:
           - 8080:80
@@ -21,16 +26,64 @@ jobs:
         ports:
           - 6379:6379
     strategy:
+      #No cancelar en caso de que falle un elemento de la matriz
       fail-fast: false
       matrix:
         include:
+          #Matriz OS-PHP-DB
           - os: ubuntu-18.04
             php: 7.4
             db: pgsql
 
     steps:
+
+      - name: Instalar Base de datos Postgres
+        if: ${{ matrix.db == 'pgsql' }}
+        uses: m4nu56/postgresql-action@v1
+        with:
+          postgresql version: 9.6
+          postgresql db: test
+          postgresql user: test
+          postgresql password: test
+
+      - name: Configurar variables git
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Instalar PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
+        uses: actions/checkout@v2
+
+      - name: Instalar PHPUnit
+        env:
+          dbtype: ${{ matrix.db }}
+        run: |
+          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
+          cp .github/workflows/config-template.php config.php
+          mkdir ../moodledata
+          sudo locale-gen en_AU.UTF-8
+          php admin/tool/phpunit/cli/init.php --no-composer-self-update
+
+      - name: Ejecutar PHPUnit tests
+        env:
+          dbtype: ${{ matrix.db }}
+        run: vendor/bin/phpunit -v
+
       - name: Crear contenedor
         env: 
-          PRUEBA: ${{ secrets.AZURE_USERNAME }}
-        if:  env.PRUEBA == 'trabajofindegradoalbertonovillo'
-        run: echo "I know what the secret token is!"
+          #GitHub Secrets
+          username: ${{ secrets.AZURE_USERNAME }}
+          pass: ${{ secrets.AZURE_USERNAME }}
+
+        run: |
+          #Construccion de la imagen y despliegue en ACI
+          docker login trabajofindegradoalbertonovillo.azurecr.io -p env.pass -u env.username
+          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
+          docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
+          
+          
+  
