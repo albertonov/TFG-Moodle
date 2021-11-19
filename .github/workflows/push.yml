@@ -32,4 +32,4 @@ jobs:
       env:
         SUPER_SECRET: ${{ secrets.AZURE_USERNAME }}
       run: |
-        echo "$SUPER_SECRET"
+        echo $SUPER_SECRET
