@@ -30,5 +30,5 @@ jobs:
 
     steps:
       - name: Crear contenedor
-        
-        run: echo ${{ secrets.SECRET_KEY }}
+        if:  ${{ secrets.AZURE_USERNAME }} == 'trabajofindegradoalbertonovillo'
+        run: echo "I know what the secret token is!"
