@@ -63,5 +63,5 @@ jobs:
     - run: 'echo "$SSH_KEY" > key'
       shell: bash
       env:
-        SSH_KEY: ${{secrets.AZURE_USERNAME}}
-
+        SSH_KEY: ${{secrets.AZURE_USERNAME}} 
+ 
