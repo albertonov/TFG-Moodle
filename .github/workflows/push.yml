@@ -37,6 +37,40 @@ jobs:
 
     steps:
 
+      - name: Instalar Base de datos Postgres
+        if: ${{ matrix.db == 'pgsql' }}
+        uses: m4nu56/postgresql-action@v1
+        with:
+          postgresql version: 9.6
+          postgresql db: test
+          postgresql user: test
+          postgresql password: test
+
+      - name: Configurar variables git
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Instalar PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
+        uses: actions/checkout@v2
+
+      - name: Instalar PHPUnit
+        env:
+          dbtype: ${{ matrix.db }}
+        run: |
+          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
+          cp .github/workflows/config-template.php config.php
+          mkdir ../moodledata
+          sudo locale-gen en_AU.UTF-8
+          #php admin/tool/phpunit/cli/init.php --no-composer-self-update
+      - name: Ejecutar PHPUnit tests
+        env:
+          dbtype: ${{ matrix.db }}
+        run: echo 'pruebas' #vendor/bin/phpunit -v
 
         
       - name: Crear contenedor
