@@ -74,7 +74,11 @@ jobs:
           cat config.php  
           
           #Construccion de la imagen y despliegue en ACI
-          docker login trabajofindegradoalbertonovillo.azurecr.io -p $env.pass -u $env.username
+          echo  ${{ secrets.AZURE_PASS }} > pass
+          $ cat pass | docker login --username  ${{ secrets.AZURE_USERNAME }}  --password-stdin
+          
+          
+          #docker login trabajofindegradoalbertonovillo.azurecr.io -p $env.pass -u $env.username
           #echo ${{ secrets.AZURE_PASS }} | docker login --username  ${{ secrets.AZURE_USERNAME }} --password-stdin
           #docker login trabajofindegradoalbertonovillo.azurecr.io --password-stdin env.pass -u env.username 
           #docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 . 
