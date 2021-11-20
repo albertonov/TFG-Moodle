@@ -70,7 +70,7 @@ jobs:
       - name: Ejecutar PHPUnit tests
         env:
           dbtype: ${{ matrix.db }}
-        run: echo'pruebas' #vendor/bin/phpunit -v
+        run: echo 'pruebas' #vendor/bin/phpunit -v
         
       - name: Crear contenedor
         env: 
