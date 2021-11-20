@@ -71,7 +71,7 @@ jobs:
           echo '$CFG->directorypermissions = 0777;'>> config.php
           echo 'require_once(__DIR__ . "/lib/setup.php");'>> config.php
 
-          cat config.php 
+          cat config.php  
           
           #Construccion de la imagen y despliegue en ACI
           docker login trabajofindegradoalbertonovillo.azurecr.io -p $env.pass -u $env.username
