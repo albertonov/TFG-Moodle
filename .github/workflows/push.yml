@@ -36,7 +36,18 @@ jobs:
             db: pgsql
 
     steps:
-
+      - name: Instalar Base de datos Postgres
+        if: ${{ matrix.db == 'pgsql' }}
+        uses: m4nu56/postgresql-action@v1
+        with:
+          postgresql version: 9.6
+          postgresql db: test
+          postgresql user: test
+          postgresql password: test
+    
+      - name: Configurar variables git
+        uses: rlespinasse/github-slug-action@v3.x
+        
       - name: Instalar PHPUnit
         env:
           dbtype: ${{ matrix.db }}
@@ -45,7 +56,10 @@ jobs:
           cp .github/workflows/config-template.php config.php
           mkdir ../moodledata
           
-          
+
+      - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
+        uses: actions/checkout@v2
+        
       - name: Crear contenedor
         env: 
           #GitHub Secrets
