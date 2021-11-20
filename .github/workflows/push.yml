@@ -46,6 +46,8 @@ jobs:
           dbhost: ${{ secrets.DBHOST }}
 
         run: |
+          #Borrar despues
+          cp .github/workflows/config-template.php config.php
           #Borramos el config.php de prueba
           rm config.php
           
