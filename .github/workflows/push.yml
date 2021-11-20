@@ -37,53 +37,33 @@ jobs:
 
     steps:
 
-      - name: Instalar Base de datos Postgres
-        if: ${{ matrix.db == 'pgsql' }}
-        uses: m4nu56/postgresql-action@v1
-        with:
-          postgresql version: 9.6
-          postgresql db: test
-          postgresql user: test
-          postgresql password: test
-
-      - name: Configurar variables git
-        uses: rlespinasse/github-slug-action@v3.x
-
-      - name: Instalar PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: none
-
-      - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
-        uses: actions/checkout@v2
-
-      - name: Instalar PHPUnit
-        env:
-          dbtype: ${{ matrix.db }}
-        run: |
-          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
-          cp .github/workflows/config-template.php config.php
-          mkdir ../moodledata
-          sudo locale-gen en_AU.UTF-8
-          php admin/tool/phpunit/cli/init.php --no-composer-self-update
-
-      - name: Ejecutar PHPUnit tests
-        env:
-          dbtype: ${{ matrix.db }}
-        run: vendor/bin/phpunit -v
 
       - name: Crear contenedor
         env: 
           #GitHub Secrets
           username: ${{ secrets.AZURE_USERNAME }}
-          pass: ${{ secrets.AZURE_USERNAME }}
+          pass: ${{ secrets.AZURE_PASS }}
+          dbhost: ${{ secrets.DBHOST }}
 
         run: |
+          #Borramos el config.php de prueba
+          rm config.php
+          
+          #creamos el config.php de produccion
+          
+          echo 'unset($CFG);' > config.php
+          echo 'global $CFG;' >> config.php
+          echo '$CFG = new stdClass();' >> config.php
+          echo '$CFG->dbtype    = "pgsql";' >> config.php
+          echo '$CFG->dblibrary = "native";' >> config.php
+          echo '$CFG->dbhost    = "env.dbhost";' >> config.php
+          
+          cat config.php
+          
           #Construccion de la imagen y despliegue en ACI
           docker login trabajofindegradoalbertonovillo.azurecr.io -p env.pass -u env.username
-          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
-          docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
+          #docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
+          #docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
           
           
   
