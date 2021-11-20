@@ -86,8 +86,9 @@ jobs:
           rm config.php
           
           #creamos el config.php de produccion
-          
-          echo 'unset($CFG);' > config.php
+          echo '<?php' > config.php
+
+          echo 'unset($CFG);' >> config.php
           echo 'global $CFG;' >> config.php
           echo '$CFG = new stdClass();' >> config.php
           echo '$CFG->dbtype    = "pgsql";' >> config.php
