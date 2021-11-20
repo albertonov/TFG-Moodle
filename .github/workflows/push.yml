@@ -58,7 +58,7 @@ jobs:
           echo '$CFG = new stdClass();' >> config.php
           echo '$CFG->dbtype    = "pgsql";' >> config.php
           echo '$CFG->dblibrary = "native";' >> config.php
-          echo '$CFG->dbhost    = "env.dbhost";' >> config.php
+          echo '$CFG->dbhost    = "${{ secrets.DBHOST }}";' >> config.php
           
           cat config.php 
           
