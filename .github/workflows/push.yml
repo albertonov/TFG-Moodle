@@ -88,23 +88,23 @@ jobs:
           #creamos el config.php de produccion
           echo '<?php' > config.php
 
-          echo '\n unset($CFG);' >> config.php
-          echo '\n global $CFG;' >> config.php
-          echo '\n $CFG = new stdClass();' >> config.php
-          echo '\n $CFG->dbtype    = "pgsql";' >> config.php
-          echo '\n $CFG->dblibrary = "native";' >> config.php
-          echo '\n $CFG->dbhost    = "${{ secrets.DBHOST }}";' >> config.php
-          echo '\n $CFG->dbname = "moodle";' >> config.php
-          echo '\n $CFG->dbuser   = "${{ secrets.DBUSER }}";' >> config.php
-          echo '\n $CFG->dbpass   = "${{ secrets.DBPASS }}";' >> config.php
-          echo '\n $CFG->dbprefix = "mdl_";' >> config.php
-          echo '\n $CFG->dboptions = array ("dbpersist" => 0,"dbport" => 5432, "dbsocket" => "",);' >> config.php
-          echo '\n $CFG->wwwroot   = "http://trabajofindegradoalbertonc.northeurope.azurecontainer.io/moodle";' >> config.php
-          echo '\n $CFG->dirroot   = "/var/www/html/moodle";'>> config.php
-          echo '\n $CFG->dataroot  = "/var/www/moodledata";'>> config.php
-          echo '\n $CFG->admin     = "admin";'>> config.php
-          echo '\n $CFG->directorypermissions = 0777;'>> config.php
-          echo '\n require_once(__DIR__ . "/lib/setup.php");'>> config.php
+          echo ' unset($CFG);' >> config.php
+          echo ' global $CFG;' >> config.php
+          echo ' $CFG = new stdClass();' >> config.php
+          echo ' $CFG->dbtype    = "pgsql";' >> config.php
+          echo ' $CFG->dblibrary = "native";' >> config.php
+          echo ' $CFG->dbhost    = "${{ secrets.DBHOST }}";' >> config.php
+          echo ' $CFG->dbname = "moodle";' >> config.php
+          echo ' $CFG->dbuser   = "${{ secrets.DBUSER }}";' >> config.php
+          echo ' $CFG->dbpass   = "${{ secrets.DBPASS }}";' >> config.php
+          echo ' $CFG->dbprefix = "mdl_";' >> config.php
+          echo ' $CFG->dboptions = array ("dbpersist" => 0,"dbport" => 5432, "dbsocket" => "",);' >> config.php
+          echo ' $CFG->wwwroot   = "http://trabajofindegradoalbertonc.northeurope.azurecontainer.io/moodle";' >> config.php
+          echo ' $CFG->dirroot   = "/var/www/html/moodle";'>> config.php
+          echo ' $CFG->dataroot  = "/var/www/moodledata";'>> config.php
+          echo ' $CFG->admin     = "admin";'>> config.php
+          echo ' $CFG->directorypermissions = 0777;'>> config.php
+          echo 'require_once(__DIR__ . "/lib/setup.php");'>> config.php
 
           cat config.php  
           
