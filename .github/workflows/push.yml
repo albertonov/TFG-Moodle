@@ -37,7 +37,15 @@ jobs:
 
     steps:
 
-
+      - name: Instalar PHPUnit
+        env:
+          dbtype: ${{ matrix.db }}
+        run: |
+          echo "pathtophp=$(which php)" >> $GITHUB_ENV # Inject installed pathtophp to env. The template config needs it.
+          cp .github/workflows/config-template.php config.php
+          mkdir ../moodledata
+          
+          
       - name: Crear contenedor
         env: 
           #GitHub Secrets
@@ -46,8 +54,7 @@ jobs:
           dbhost: ${{ secrets.DBHOST }}
 
         run: |
-          #Borrar despues
-          cp .github/workflows/config-template.php config.php
+
           #Borramos el config.php de prueba
           rm config.php
           
