@@ -60,7 +60,7 @@ jobs:
           echo '$CFG->dblibrary = "native";' >> config.php
           echo '$CFG->dbhost    = "env.dbhost";' >> config.php
           
-          cat config.php --password-stdin
+          cat config.php 
           
           #Construccion de la imagen y despliegue en ACI
           #docker login trabajofindegradoalbertonovillo.azurecr.io -p env.pass -u env.username --password-stdin
