@@ -76,11 +76,11 @@ jobs:
           #Construccion de la imagen y despliegue en ACI
           az acr login -n trabajofindegradoalbertonovillo -u trabajofindegradoalbertonovillo -p ${{ secrets.AZURE_PASS }}
 
-          docker login trabajofindegradoalbertonovillo.azurecr.io -p $env.pass -u $env.username
+          #docker login trabajofindegradoalbertonovillo.azurecr.io -p $env.pass -u $env.username
           #echo ${{ secrets.AZURE_PASS }} | docker login --username  ${{ secrets.AZURE_USERNAME }} --password-stdin
           #docker login trabajofindegradoalbertonovillo.azurecr.io --password-stdin env.pass -u env.username 
-          #docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 . 
-          #docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
+          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 . 
+          docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
           
           
   
