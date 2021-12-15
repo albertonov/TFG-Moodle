@@ -5,7 +5,7 @@ use core_customfield\data;
 require_once(__DIR__.'/factory/factory.php');
 
 class stats {
-
+    #cambios video
     public $experiencechart;
     public $attendacechart;
     public $qualified_task;
