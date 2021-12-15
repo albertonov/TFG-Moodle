@@ -4,13 +4,15 @@
   }
 
   ul.navega li {
-        display: inline;
+      display:inline-block;
         list-style-type:square;
   }
 
   .cal {
     display: flex;
     align-items: right;
+    float:right;
+
   }
 
   .dt {
@@ -28,7 +30,7 @@
 
 <div class="container" >
   <div class="row" style="margin-left: -5%;margin-right: -5%;">
-    <div class="col-sm-3"  style="padding-left: 0%;padding-right: 0%;">
+    <div class="col-sm-3"  style="">
       Experiencia
       <div class="progress">
         <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
@@ -39,8 +41,8 @@
         <div class="progress-bar bg-danger" role="progressbar" style="width:{{qualificated_post.percentage_like}}%" aria-valuenow={{qualificated_post.percentage_like}} aria-valuemin="0" aria-valuemax="100"></div>
         <div class="progress-bar bg-warning" role="progressbar" style="width: {{qualificated_post.percentage_negative}}%" aria-valuenow={{qualificated_post.percentage_negative}} aria-valuemin="0" aria-valuemax="100"></div>
       </div>
-      <ul class="navega">
-        <li><span class="badge badge-success">Nº Positivos: {{qualificated_post.total_positive}}</span></li>
+      <ul class="navega" style="             padding-inline-start: 0;      ">
+        <li><span  class="badge badge-success">Nº Positivos: {{qualificated_post.total_positive}}</span></li>
         <li><span class="badge badge-danger">Nº Likes: {{qualificated_post.total_like}}</span></li>
         <li><span class="badge badge-warning">Nº Negativos: {{qualificated_post.total_negative}}</span></li>
       </ul>
@@ -53,10 +55,10 @@
 
     <div class="col-sm-5">
       <div class="d-flex justify-content-around">
-        <button href="#carouseldiagrams" data-slide-to="0" style="font-size: 12px;" class="btn btn-secondary">DIAGRAMA
-          1</button>
-        <button href="#carouseldiagrams" data-slide-to="1" style="font-size: 12px;" class="btn btn-secondary">DIAGRAMA
-          2</button>
+        <button href="#carouseldiagrams" data-slide-to="0" style="font-size: 12px;" class="btn btn-secondary">Puntos de experiencia
+          </button>
+        <button href="#carouseldiagrams" data-slide-to="1" style="font-size: 12px;" class="btn btn-secondary">Número de Conexiones
+          </button>
       </div>
 
 
@@ -92,10 +94,11 @@
                 <a href="{{url}}">{{name}}</a>
 
                 <span style="font-style: italic;"> - {{coursename}} </span>
+                <div class="cal">
+                  {{grade}} {{#isquiz}}/ 10{{/isquiz}}{{^isquiz}}/ 100{{/isquiz}}
+                </div>
               </div>
-              <div class="cal">
-                {{grade}}
-              </div>
+
 
             </div>
             <div class="row">

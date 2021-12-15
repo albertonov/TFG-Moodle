@@ -57,15 +57,20 @@
                 {{^isdeleted}}
                     {{#author}}
                         <div class="mr-2" style="width: 45px;">
+                            {{#isanomreply}}
+                            {{/isanomreply}}
+                            {{^isanomreply}}
                             {{#urls.profileimage}}
-                                <img
-                                    class="rounded-circle w-100"
-                                    src="{{{.}}}"
-                                    alt="{{#str}} pictureof, core, {{author.fullname}} {{/str}}"
-                                    aria-hidden="true"
-                                    title="{{#str}} pictureof, core, {{author.fullname}} {{/str}}"
-                                >
-                            {{/urls.profileimage}}
+                            <img
+                                class="rounded-circle w-100"
+                                src="{{{.}}}"
+                                alt="{{#str}} pictureof, core, {{author.fullname}} {{/str}}"
+                                aria-hidden="true"
+                                title="{{#str}} pictureof, core, {{author.fullname}} {{/str}}"
+                            >
+                        {{/urls.profileimage}}
+                            {{/isanomreply}}
+
                         </div>
                     {{/author}}
                 {{/isdeleted}}
@@ -83,7 +88,7 @@
                     {{^isdeleted}}
                         <div class="mb-3" tabindex="-1">
                             {{#isanomreply}}
-                            By Un autor anonimo
+                            de Un autor anonimo
                             {{/isanomreply}}
                             {{^isanomreply}}
                             {{#html.authorsubheading}}{{{.}}}{{/html.authorsubheading}}
@@ -189,7 +194,7 @@
 
                 <div class="no-overflow w-100 content-alignment-container">
                     <div id="post-content-{{id}}" class="post-content-container">
-                        {{{message}}} {{isanomreply}}
+                        {{{message}}} 
                     </div>
 
                     {{^isdeleted}}
