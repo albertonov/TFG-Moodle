@@ -1,17 +1,23 @@
 name: Core
 
+#Ejecutar solo en push
 on: [push]
 
 env:
+  #Version PHP
   php: 7.4
 
 jobs:
 
 
-  PHPUnit:
+  PHPUnit-Docker:
+    #Ejecutar pruebas 
     runs-on: ${{ matrix.os }}
+    environment: Docker #Enviroment para acceder a Secrets de Docker
+
     services:
       exttests:
+        #Imagen de Moodle para test
         image: moodlehq/moodle-exttests
         ports:
           - 8080:80
@@ -20,16 +26,18 @@ jobs:
         ports:
           - 6379:6379
     strategy:
+      #No cancelar en caso de que falle un elemento de la matriz
       fail-fast: false
       matrix:
         include:
+          #Matriz OS-PHP-DB
           - os: ubuntu-18.04
             php: 7.4
             db: pgsql
 
     steps:
 
-      - name: Setting up DB pgsql
+      - name: Instalar Base de datos Postgres
         if: ${{ matrix.db == 'pgsql' }}
         uses: m4nu56/postgresql-action@v1
         with:
@@ -38,10 +46,10 @@ jobs:
           postgresql user: test
           postgresql password: test
 
-      - name: Configuring git vars
+      - name: Configurar variables git
         uses: rlespinasse/github-slug-action@v3.x
 
-      - name: Setting up PHP ${{ matrix.php }}
+      - name: Instalar PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
@@ -50,7 +58,7 @@ jobs:
       - name: Checking out code from ${{ env.GITHUB_REF_SLUG }}
         uses: actions/checkout@v2
 
-      - name: Setting up PHPUnit
+      - name: Instalar PHPUnit
         env:
           dbtype: ${{ matrix.db }}
         run: |
@@ -59,15 +67,51 @@ jobs:
           mkdir ../moodledata
           sudo locale-gen en_AU.UTF-8
           php admin/tool/phpunit/cli/init.php --no-composer-self-update
-
-      - name: Running PHPUnit tests
+      - name: Ejecutar PHPUnit tests
         env:
           dbtype: ${{ matrix.db }}
         run: vendor/bin/phpunit -v
 
+        
       - name: Crear contenedor
+        env: 
+          #GitHub Secrets
+          username: ${{ secrets.AZURE_USERNAME }}
+          pass: ${{ secrets.AZURE_PASS }}
+          dbhost: ${{ secrets.DBHOST }}
 
         run: |
-          docker login trabajofindegradoalbertonovillo.azurecr.io -p yHXELhOnlZJLOptCaQB=XiTl=dDeXkqI -u trabajofindegradoalbertonovillo
-          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 .
+
+          #Borramos el config.php de pruebas
+          rm config.php
+          
+          #creamos el config.php de produccion
+          echo '<?php' > config.php
+
+          echo ' unset($CFG);' >> config.php
+          echo ' global $CFG;' >> config.php
+          echo ' $CFG = new stdClass();' >> config.php
+          echo ' $CFG->dbtype    = "pgsql";' >> config.php
+          echo ' $CFG->dblibrary = "native";' >> config.php
+          echo ' $CFG->dbhost    = "${{ secrets.DBHOST }}";' >> config.php
+          echo ' $CFG->dbname = "moodle";' >> config.php
+          echo ' $CFG->dbuser   = "${{ secrets.DBUSER }}";' >> config.php
+          echo ' $CFG->dbpass   = "${{ secrets.DBPASS }}";' >> config.php
+          echo ' $CFG->dbprefix = "mdl_";' >> config.php
+          echo ' $CFG->dboptions = array ("dbpersist" => 0,"dbport" => 5432, "dbsocket" => "",);' >> config.php
+          echo ' $CFG->wwwroot   = "http://trabajofindegradoalbertonc.northeurope.azurecontainer.io/moodle";' >> config.php
+          echo ' $CFG->dirroot   = "/var/www/html/moodle";'>> config.php
+          echo ' $CFG->dataroot  = "/var/www/moodledata";'>> config.php
+          echo ' $CFG->admin     = "admin";'>> config.php
+          echo ' $CFG->directorypermissions = 0777;'>> config.php
+          echo 'require_once(__DIR__ . "/lib/setup.php");'>> config.php
+
+          cat config.php  
+          
+          #Construccion de la imagen y despliegue en ACI
+          az acr login -n trabajofindegradoalbertonovillo -u trabajofindegradoalbertonovillo -p ${{ secrets.AZURE_PASS }}
+          docker build  -t trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 . 
           docker push trabajofindegradoalbertonovillo.azurecr.io/moodle-tfg:1.0 
+          
+          
+  
